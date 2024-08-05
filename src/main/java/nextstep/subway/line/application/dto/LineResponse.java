@@ -30,6 +30,10 @@ public class LineResponse {
         return stations;
     }
 
+    private LineResponse() {
+
+    }
+
     private LineResponse(Long id, String name, String color, List<StationResponse> stations) {
         this.id = id;
         this.name = name;

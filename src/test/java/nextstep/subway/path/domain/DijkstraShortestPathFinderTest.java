@@ -1,9 +1,8 @@
-package nextstep.subway.line.domain;
+package nextstep.subway.path.domain;
 
 import nextstep.subway.exception.IllegalPathException;
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.path.application.dto.PathResponse;
-import nextstep.subway.path.domain.DijkstraShortestPathFinder;
-import nextstep.subway.path.domain.PathFinderBuilder;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
