@@ -2,6 +2,9 @@ package nextstep.cucumber.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.cucumber.java8.En;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -24,47 +27,48 @@ public class StationStepDef implements En {
     private AcceptanceContext context;
     ExtractableResponse<Response> response;
 
-    public StationStepDef() {
-        Given("지하철역들을 생성 요청하고", (DataTable table) -> {
-            List<Map<String, String>> maps = table.asMaps();
-            maps.stream()
-                    .forEach(params -> {
-                        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                                .body(params)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .when()
-                                .post("/stations")
-                                .then().log().all()
-                                .extract();
-                        context.store.put(params.get("name")
-                                , (new ObjectMapper()).convertValue(response.jsonPath().get(), StationResponse.class));
-                    });
-        });
-
-        When("지하철역을 생성하면", () -> {
-            Map<String, String> params = new HashMap<>();
-            params.put("name", "강남역");
-            response = given().log().all()
-                    .body(params)
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .when()
-                    .post("/stations")
-                    .then().log().all()
-                    .extract();
-        });
-
-        Then("지하철역이 생성된다", () -> {
-            assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-        });
-
-        Then("지하철역 목록 조회 시 생성한 역을 찾을 수 있다", () -> {
-            List<String> stationNames =
-                    given().log().all()
-                            .when().get("/stations")
+    @Given("지하철역들을 생성 요청하고")
+    public void 지하철_역들_생성_요청(DataTable table) {
+        List<Map<String, String>> maps = table.asMaps();
+        maps.stream()
+                .forEach(params -> {
+                    ExtractableResponse<Response> response = RestAssured.given().log().all()
+                            .body(params)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .when()
+                            .post("/stations")
                             .then().log().all()
-                            .extract().jsonPath().getList("name", String.class);
-            assertThat(stationNames).containsAnyOf("강남역");
-        });
+                            .extract();
+                    context.store.put(params.get("name")
+                            , (new ObjectMapper()).convertValue(response.jsonPath().get(), StationResponse.class));
+                });
     }
 
+    @When("지하철역을 생성하면")
+    public void 지하철역_생성() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "강남역");
+        response = given().log().all()
+                .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .post("/stations")
+                .then().log().all()
+                .extract();
+    }
+
+    @Then("지하철역이 생성된다")
+    public void 지하철역_생성됨() {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @Then("지하철역 목록 조회 시 생성한 역을 찾을 수 있다")
+    public void 지하철역_목록_조회() {
+        List<String> stationNames =
+                given().log().all()
+                        .when().get("/stations")
+                        .then().log().all()
+                        .extract().jsonPath().getList("name", String.class);
+        assertThat(stationNames).containsAnyOf("강남역");
+    }
 }
