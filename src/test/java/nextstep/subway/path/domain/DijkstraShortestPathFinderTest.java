@@ -2,7 +2,10 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.exception.IllegalPathException;
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.Newline;
+import nextstep.subway.path.application.dto.NewPathResponse;
 import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.path.application.dto.PathSearchType;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,6 +67,86 @@ class DijkstraShortestPathFinderTest {
         assertThat(responseStations.get(1).getId()).isEqualTo(남부터미널역.getId());
         assertThat(responseStations.get(2).getId()).isEqualTo(양재역.getId());
         assertThat(pathResponse.getDistance()).isEqualTo(5L);
+    }
+
+    @Test
+    @DisplayName("두 역 최단거리 기준 경로조회 시 경로, 거리, 소요시간 리턴")
+    void 최단거리_기준_조회() {
+        // given
+        Newline 이호선 = new Newline("2호선", "bg-green-600");
+        이호선.addSection(교대역, 강남역, 10L, 3L);
+
+        Newline 신분당선 = new Newline("신분당선", "bg-blue-600");
+        신분당선.addSection(강남역, 양재역, 10L, 3L);
+
+
+        Newline 삼호선 = new Newline("3호선", "bg-red-600");
+        삼호선.addSection(교대역, 남부터미널역, 2L, 5L);
+        삼호선.addSection(남부터미널역, 양재역, 3L, 5L);
+
+        PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder()
+                .addVertex(이호선.getStations())
+                .addNewEdgeWeight(이호선.getSections().getSectionList(), PathSearchType.DISTANCE)
+                .addVertex(신분당선.getStations())
+                .addEdgeWeight(신분당선.getSections().getSectionList())
+                .addVertex(삼호선.getStations())
+                .addEdgeWeight(삼호선.getSections().getSectionList());
+
+        // when
+        NewPathResponse pathResponse = pathFinderBuilder
+                .setSource(교대역)
+                .setTarget(양재역)
+                .newfind();
+
+        // then
+        List<StationResponse> responseStations = pathResponse.getStations();
+        assertThat(responseStations).hasSize(3);
+        assertThat(responseStations.get(0).getId()).isEqualTo(교대역.getId());
+        assertThat(responseStations.get(1).getId()).isEqualTo(남부터미널역.getId());
+        assertThat(responseStations.get(2).getId()).isEqualTo(양재역.getId());
+        assertThat(pathResponse.getDistance()).isEqualTo(5L);
+        assertThat(pathResponse.getDuration()).isEqualTo(10L);
+
+
+    }
+
+    @Test
+    @DisplayName("두 역 최소시간 기준 경로조회 시 경로, 거리, 소요시간 리턴")
+    void 최소시간_기준_조회() {
+        // given
+        Newline 이호선 = new Newline("2호선", "bg-green-600");
+        이호선.addSection(교대역, 강남역, 10L, 3L);
+
+        Newline 신분당선 = new Newline("신분당선", "bg-blue-600");
+        신분당선.addSection(강남역, 양재역, 10L, 3L);
+
+
+        Newline 삼호선 = new Newline("3호선", "bg-red-600");
+        삼호선.addSection(교대역, 남부터미널역, 2L, 5L);
+        삼호선.addSection(남부터미널역, 양재역, 3L, 5L);
+
+        PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder()
+                .addVertex(이호선.getStations())
+                .addNewEdgeWeight(이호선.getSections().getSectionList(), PathSearchType.DURATION)
+                .addVertex(신분당선.getStations())
+                .addEdgeWeight(신분당선.getSections().getSectionList())
+                .addVertex(삼호선.getStations())
+                .addEdgeWeight(삼호선.getSections().getSectionList());
+
+        // when
+        NewPathResponse pathResponse = pathFinderBuilder
+                .setSource(교대역)
+                .setTarget(양재역)
+                .newfind();
+
+        // then
+        List<StationResponse> responseStations = pathResponse.getStations();
+        assertThat(responseStations).hasSize(3);
+        assertThat(responseStations.get(0).getId()).isEqualTo(교대역.getId());
+        assertThat(responseStations.get(1).getId()).isEqualTo(강남역.getId());
+        assertThat(responseStations.get(2).getId()).isEqualTo(양재역.getId());
+        assertThat(pathResponse.getDistance()).isEqualTo(20L);
+        assertThat(pathResponse.getDuration()).isEqualTo(6L);
     }
 
     @Test
