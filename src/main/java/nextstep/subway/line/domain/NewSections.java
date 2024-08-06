@@ -17,9 +17,9 @@ public class NewSections {
     private final int BACK_SECTION_INDEX = 1;
 
     @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<NewSection> sectionList = new ArrayList<>();
+    private List<Newsection> sectionList = new ArrayList<>();
 
-    public List<NewSection> getSectionList() {
+    public List<Newsection> getSectionList() {
         return Collections.unmodifiableList(sectionList);
     }
 
@@ -34,11 +34,11 @@ public class NewSections {
             return stations;
         }
 
-        NewSection currentSection = sectionList.get(0);
+        Newsection currentSection = sectionList.get(0);
         stations.add(currentSection.getUpStation());
         stations.add(currentSection.getDownStation());
 
-        Optional<NewSection> nextSection = findNextSection(currentSection);
+        Optional<Newsection> nextSection = findNextSection(currentSection);
 
         while (nextSection.isPresent()) {
             currentSection = nextSection.get();
@@ -49,14 +49,14 @@ public class NewSections {
         return stations;
     }
 
-    public boolean addableSection(NewSection newSection) {
+    public boolean addableSection(Newsection newSection) {
         validateStationDuplication(newSection);
         validateLinkableSection(newSection);
         validateMidAddableDistance(newSection);
         return true;
     }
 
-    public void addSection(NewSection section) {
+    public void addSection(Newsection section) {
         if (sectionList.isEmpty()) {
             sectionList.add(section);
             return;
@@ -92,7 +92,7 @@ public class NewSections {
     }
 
     private void removeSection(Station station) {
-        List<NewSection> collectSection = findSectionsContainingStation(station);
+        List<Newsection> collectSection = findSectionsContainingStation(station);
 
         if (collectSection == null || collectSection.isEmpty()) {
             throw new IllegalSectionException("노선에 해당 역을 포한한 구간이 없습니다.");
@@ -110,16 +110,16 @@ public class NewSections {
         }
     }
 
-    private List<NewSection> findSectionsContainingStation(Station station) {
+    private List<Newsection> findSectionsContainingStation(Station station) {
         return sectionList.stream()
                 .filter(s -> s.containsStation(station))
                 .collect(Collectors.toList());
     }
 
-    private void combineFrontAndBackSection(NewSection frontSection, NewSection backSection) {
+    private void combineFrontAndBackSection(Newsection frontSection, Newsection backSection) {
         Long distanceSum = frontSection.getDistance() + backSection.getDistance();
         Long durationSum = frontSection.getDuration() + backSection.getDuration();
-        NewSection combinedSection = new NewSection(frontSection.getLine(),
+        Newsection combinedSection = new Newsection(frontSection.getLine(),
                 frontSection.getUpStation(),
                 backSection.getDownStation(),
                 distanceSum,
@@ -130,7 +130,7 @@ public class NewSections {
         sectionList.set(frontSectionIndex, combinedSection);
     }
 
-    private void removeSingleSection(NewSection section) {
+    private void removeSingleSection(Newsection section) {
         sectionList.remove(section);
     }
 
@@ -142,12 +142,12 @@ public class NewSections {
         return lastDownStation.getId() == newUpStation.getId();
     }
 
-    private void addSectionToFront(NewSection section) {
-        List<NewSection> sections = new ArrayList<>(sectionList);
+    private void addSectionToFront(Newsection section) {
+        List<Newsection> sections = new ArrayList<>(sectionList);
         sectionList.clear();
         sectionList.add(section);
-        for (NewSection s : sections) {
-            sectionList.add(new NewSection(s.getLine(),
+        for (Newsection s : sections) {
+            sectionList.add(new Newsection(s.getLine(),
                     s.getUpStation(),
                     s.getDownStation(),
                     s.getDistance(),
@@ -155,29 +155,29 @@ public class NewSections {
         }
     }
 
-    private void addSectionToEnd(NewSection section) {
+    private void addSectionToEnd(Newsection section) {
         sectionList.add(section);
     }
 
-    private void addSectionToMiddle(NewSection section) {
+    private void addSectionToMiddle(Newsection section) {
         Station newUpStation = section.getUpStation();
         Station newDownStation = section.getDownStation();
         Long newDistance = section.getDistance();
         Long newDuration = section.getDuration();
 
-        NewSection sectionByUpStation = findSectionByUpStation(section.getUpStation())
+        Newsection sectionByUpStation = findSectionByUpStation(section.getUpStation())
                 .orElseThrow(() -> new IllegalSectionException("구간을 추가할 수 없습니다."));
 
         int oldIndex = sectionList.indexOf(sectionByUpStation);
 
-        NewSection rightSection = new NewSection(section.getLine(),
+        Newsection rightSection = new Newsection(section.getLine(),
                 newDownStation,
                 sectionByUpStation.getDownStation(),
                 sectionByUpStation.getDistance() - newDistance,
                 sectionByUpStation.getDuration() - newDuration);
         sectionList.set(oldIndex, rightSection);
 
-        NewSection leftSection = new NewSection(section.getLine(),
+        Newsection leftSection = new Newsection(section.getLine(),
                 newUpStation,
                 newDownStation,
                 newDistance,
@@ -190,13 +190,13 @@ public class NewSections {
                 .anyMatch(sec -> sec.getUpStation().getId() == newSectionUpStation.getId());
     }
 
-    private Optional<NewSection> findNextSection(NewSection tempSection) {
+    private Optional<Newsection> findNextSection(Newsection tempSection) {
         return sectionList.stream()
                 .filter(section -> section.getUpStation().equals(tempSection.getDownStation()))
                 .findFirst();
     }
 
-    private Optional<NewSection> findSectionByUpStation(Station station) {
+    private Optional<Newsection> findSectionByUpStation(Station station) {
         return sectionList.stream()
                 .filter(s -> s.getUpStation().equals(station))
                 .findFirst();
@@ -223,31 +223,31 @@ public class NewSections {
         }
     }
 
-    private void validateStationDuplication(NewSection section) {
+    private void validateStationDuplication(Newsection section) {
         List<Station> stations = getStations();
         if (stations.contains(section.getUpStation()) && stations.contains(section.getDownStation())) {
             throw new IllegalSectionException("이미 등록되어 있는 역은 노선에 추가할 수 없습니다.");
         }
     }
 
-    private void validateLinkableSection(NewSection section) {
+    private void validateLinkableSection(Newsection section) {
         List<Station> stations = getStations();
         if (stations.size() != 0 && isUnlinkedSection(section)) {
             throw new IllegalSectionException("노선의 구간과 연결되지 않습니다.");
         }
     }
 
-    private boolean isUnlinkedSection(NewSection section) {
+    private boolean isUnlinkedSection(Newsection section) {
         List<Station> stations = getStations();
         return !stations.contains(section.getUpStation()) && !stations.contains(section.getDownStation());
     }
 
-    private void validateMidAddableDistance(NewSection section) {
-        Optional<NewSection> OptionalOldSection = findSectionByUpStation(section.getUpStation());
+    private void validateMidAddableDistance(Newsection section) {
+        Optional<Newsection> OptionalOldSection = findSectionByUpStation(section.getUpStation());
         if (!OptionalOldSection.isPresent()) {
             return;
         }
-        NewSection oldSection = OptionalOldSection.get();
+        Newsection oldSection = OptionalOldSection.get();
         Long oldSectionDistance = oldSection.getDistance();
         Long newSectionDistance = section.getDistance();
 

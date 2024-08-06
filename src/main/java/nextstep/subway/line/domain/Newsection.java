@@ -11,13 +11,13 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class NewSection {
+public class Newsection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Line line;
+    private Newline line;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Station upStation;
@@ -29,7 +29,7 @@ public class NewSection {
 
     private Long duration;
 
-    public NewSection(Line line, Station upStation, Station downStation, Long distance, Long duration) {
+    public Newsection(Newline line, Station upStation, Station downStation, Long distance, Long duration) {
         validateStations(upStation, downStation);
         this.line = line;
         this.upStation = upStation;
@@ -48,7 +48,7 @@ public class NewSection {
         }
     }
 
-    public void setLine(Line line) {
+    public void setLine(Newline line) {
         this.line = line;
     }
 }

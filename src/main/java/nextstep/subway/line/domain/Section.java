@@ -1,11 +1,16 @@
 package nextstep.subway.line.domain;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import nextstep.subway.exception.IllegalSectionException;
 import nextstep.subway.station.domain.Station;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Section {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +26,6 @@ public class Section {
     private Station downStation;
 
     private Long distance;
-
-    protected Section() {
-    }
 
     public Section(Line line, Station upStation, Station downStation, Long distance) {
         validateStations(upStation, downStation);
@@ -41,26 +43,6 @@ public class Section {
         if (upStation.equals(downStation)) {
             throw new IllegalSectionException("구간의 상행역과 하행역이 같을수없습니다.");
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Line getLine() {
-        return line;
-    }
-
-    public Station getUpStation() {
-        return upStation;
-    }
-
-    public Station getDownStation() {
-        return downStation;
-    }
-
-    public Long getDistance() {
-        return distance;
     }
 
     public void setLine(Line line) {
