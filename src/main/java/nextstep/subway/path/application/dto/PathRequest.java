@@ -1,27 +1,22 @@
 package nextstep.subway.path.application.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PathRequest {
     private Long source;
     private Long target;
+    private PathSearchType type;
 
     public PathRequest(Long source, Long target) {
-        this.source = source;
-        this.target = target;
+        this(source, target, PathSearchType.DURATION);
     }
 
-    public Long getSource() {
-        return source;
-    }
 
-    public void setSource(Long source) {
-        this.source = source;
-    }
-
-    public Long getTarget() {
-        return target;
-    }
-
-    public void setTarget(Long target) {
-        this.target = target;
-    }
 }

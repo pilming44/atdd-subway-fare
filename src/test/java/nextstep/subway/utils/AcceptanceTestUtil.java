@@ -13,6 +13,9 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public final class AcceptanceTestUtil {
+    public static final String SEARCH_TYPE_DURATION = "DURATION";
+    public static final String SEARCH_TYPE_DISTANCE = "DISTANCE";
+
     public static ExtractableResponse<Response> 노선_생성_Extract(Map<String, Object> params) {
         return RestAssured.given().log().all()
                 .body(params)

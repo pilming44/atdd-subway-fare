@@ -31,14 +31,14 @@ public class PathAcceptanceTest extends AcceptanceTest {
     }
 
     /**
-     * Given 3개의 노선이 등록돼있고, (교대-강남 [10], 강남-양재 [10], 교대-남부터미널 [2], 남부터미널-양재 [3])
+     * Given 3개의 노선이 등록돼있고, (교대-강남 [10|3], 강남-양재 [10|3], 교대-남부터미널 [2|5], 남부터미널-양재 [3|5])
      * 교대역    --- *2호선* ---   강남역
      * |                        |
      * *3호선*                   *신분당선*
      * |                        |
      * 남부터미널역  --- *3호선* ---   양재
      * When 출발역(교대역)과 도착역(양재역) 경로를 조회 하면
-     * Then 최단거리의 경로를 조회한다. (교대역 - 남부터미널역 - 양재역 [5])
+     * Then 최단거리의 경로를 조회한다. (교대역 - 남부터미널역 - 양재역 [5|10])
      */
     @Test
     @DisplayName("출발역과 도착역의 최단경로를 조회한다.")
@@ -53,6 +53,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .queryParam("source", 교대역Id)
                 .queryParam("target", 양재역Id)
+                .queryParam("type", SEARCH_TYPE_DISTANCE)
                 .when().get("/paths")
                 .then().log().all()
                 .extract();
@@ -60,11 +61,44 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // then
         List<StationResponse> stations = response.jsonPath().getList("stations", StationResponse.class);
         long distance = response.jsonPath().getLong("distance");
+        long duration = response.jsonPath().getLong("duration");
 
         assertThat(stations).hasSize(3);
         assertThat(stations.get(0).getId()).isEqualTo(교대역Id);
         assertThat(stations.get(1).getId()).isEqualTo(남부터미널역Id);
         assertThat(stations.get(2).getId()).isEqualTo(양재역Id);
         assertThat(distance).isEqualTo(5L);
+        assertThat(duration).isEqualTo(10L);
+    }
+
+    @Test
+    @DisplayName("출발역과 도착역의 최소 소요시간 경로를 조회한다.")
+    void 최소_소요시간_경로_조회() {
+        //given
+        노선_생성_Extract(노선_생성_매개변수("2호선", "bg-green-600", 교대역Id, 강남역Id, 10L, 3L));
+        노선_생성_Extract(노선_생성_매개변수("신분당선", "bg-gre-600", 강남역Id, 양재역Id, 10L, 3L));
+        long 삼호선Id = 노선_생성_후_id_추출("3호선", "bg-green-600", 교대역Id, 남부터미널역Id, 2L, 5L);
+        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(남부터미널역Id, 양재역Id, 3L, 5L), 삼호선Id);
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .queryParam("source", 교대역Id)
+                .queryParam("target", 양재역Id)
+                .queryParam("type", SEARCH_TYPE_DURATION)
+                .when().get("/paths")
+                .then().log().all()
+                .extract();
+
+        // then
+        List<StationResponse> stations = response.jsonPath().getList("stations", StationResponse.class);
+        long distance = response.jsonPath().getLong("distance");
+        long duration = response.jsonPath().getLong("duration");
+
+        assertThat(stations).hasSize(3);
+        assertThat(stations.get(0).getId()).isEqualTo(교대역Id);
+        assertThat(stations.get(1).getId()).isEqualTo(강남역Id);
+        assertThat(stations.get(2).getId()).isEqualTo(양재역Id);
+        assertThat(distance).isEqualTo(20L);
+        assertThat(duration).isEqualTo(6L);
     }
 }

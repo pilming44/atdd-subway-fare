@@ -10,26 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static nextstep.subway.utils.AcceptanceTestUtil.SEARCH_TYPE_DISTANCE;
+import static nextstep.subway.utils.AcceptanceTestUtil.SEARCH_TYPE_DURATION;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathStepDef implements En {
-    public static final String SEARCH_TYPE_DURATION = "DURATION";
-    public static final String SEARCH_TYPE_DISTANCE = "DISTANCE";
-
     @Autowired
     private AcceptanceContext context;
-
-    @When("{string}과 {string}의 경로를 조회하면")
-    public void 두_역의_경로_조회(String source, String target) {
-        Long sourceId = ((StationResponse) context.store.get(source)).getId();
-        Long targetId = ((StationResponse) context.store.get(target)).getId();
-        context.response = RestAssured.given().log().all()
-                .queryParam("source", sourceId)
-                .queryParam("target", targetId)
-                .when().get("/paths")
-                .then().log().all()
-                .extract();
-    }
 
     @Then("{string} 경로가 조회된다")
     public void 콤마로_구분된_경로_조회(String pathString) {
@@ -45,7 +32,7 @@ public class PathStepDef implements En {
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .queryParam("type", SEARCH_TYPE_DISTANCE)
-                .when().get("/paths/distance")
+                .when().get("/paths")
                 .then().log().all()
                 .extract();
     }
@@ -58,7 +45,7 @@ public class PathStepDef implements En {
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .queryParam("type", SEARCH_TYPE_DURATION)
-                .when().get("/paths/duration")
+                .when().get("/paths")
                 .then().log().all()
                 .extract();
     }
