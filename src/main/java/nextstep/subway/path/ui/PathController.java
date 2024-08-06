@@ -1,6 +1,8 @@
 package nextstep.subway.path.ui;
 
 import nextstep.subway.path.application.PathService;
+import nextstep.subway.path.application.dto.NewPathRequest;
+import nextstep.subway.path.application.dto.NewPathResponse;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
 import org.springframework.http.ResponseEntity;
@@ -20,5 +22,14 @@ public class PathController {
     @GetMapping
     public ResponseEntity<PathResponse> getPath(PathRequest pathRequest) {
         return ResponseEntity.ok().body(pathService.getPathOrThrow(pathRequest));
+    }
+
+    @GetMapping("/distance")
+    public ResponseEntity<NewPathResponse> getDistancePath(NewPathRequest pathRequest) {
+        return ResponseEntity.ok().body(pathService.getDistancePathOrThrow(pathRequest));
+    }
+    @GetMapping("/duration")
+    public ResponseEntity<NewPathResponse> getDurationPath(NewPathRequest pathRequest) {
+        return ResponseEntity.ok().body(pathService.getDurationPathOrThrow(pathRequest));
     }
 }

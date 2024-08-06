@@ -45,7 +45,7 @@ public class PathStepDef implements En {
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .queryParam("type", SEARCH_TYPE_DISTANCE)
-                .when().get("/paths")
+                .when().get("/paths/distance")
                 .then().log().all()
                 .extract();
     }
@@ -58,7 +58,7 @@ public class PathStepDef implements En {
                 .queryParam("source", sourceId)
                 .queryParam("target", targetId)
                 .queryParam("type", SEARCH_TYPE_DURATION)
-                .when().get("/paths")
+                .when().get("/paths/duration")
                 .then().log().all()
                 .extract();
     }

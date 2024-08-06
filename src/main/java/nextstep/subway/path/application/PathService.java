@@ -4,6 +4,10 @@ import nextstep.subway.exception.IllegalPathException;
 import nextstep.subway.exception.NoSuchStationException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
+import nextstep.subway.line.domain.Newline;
+import nextstep.subway.line.domain.NewlineRepository;
+import nextstep.subway.path.application.dto.NewPathRequest;
+import nextstep.subway.path.application.dto.NewPathResponse;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.DijkstraShortestPathFinder;
@@ -19,10 +23,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PathService {
     private final LineRepository lineRepository;
+    private final NewlineRepository newlineRepository;
     private final StationRepository stationRepository;
 
-    public PathService(LineRepository lineRepository, StationRepository stationRepository) {
+    public PathService(LineRepository lineRepository, NewlineRepository newlineRepository,StationRepository stationRepository) {
         this.lineRepository = lineRepository;
+        this.newlineRepository = newlineRepository;
         this.stationRepository = stationRepository;
     }
 
@@ -48,6 +54,54 @@ public class PathService {
                 .setSource(sourceStation)
                 .setTarget(targetStation)
                 .find();
+    }
+
+    public NewPathResponse getDistancePathOrThrow(NewPathRequest pathRequest) {
+        if (pathRequest.getSource() == null || pathRequest.getTarget() == null) {
+            throw new IllegalPathException("경로를 찾을수 없습니다.");
+        }
+
+        Station sourceStation = getStation(pathRequest.getSource());
+        Station targetStation = getStation(pathRequest.getTarget());
+
+        List<Newline> allLines = newlineRepository.findAll();
+
+        PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder();
+
+        allLines.stream()
+                .forEach(l -> pathFinderBuilder
+                        .addNewVertex(l.getStations())
+                        .addNewEdgeWeight(l.getSections().getSectionList(), pathRequest.getType())
+                );
+
+        return pathFinderBuilder
+                .setSource(sourceStation)
+                .setTarget(targetStation)
+                .newfind();
+    }
+
+    public NewPathResponse getDurationPathOrThrow(NewPathRequest pathRequest) {
+        if (pathRequest.getSource() == null || pathRequest.getTarget() == null) {
+            throw new IllegalPathException("경로를 찾을수 없습니다.");
+        }
+
+        Station sourceStation = getStation(pathRequest.getSource());
+        Station targetStation = getStation(pathRequest.getTarget());
+
+        List<Newline> allLines = newlineRepository.findAll();
+
+        PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder();
+
+        allLines.stream()
+                .forEach(l -> pathFinderBuilder
+                        .addNewVertex(l.getStations())
+                        .addNewEdgeWeight(l.getSections().getSectionList(), pathRequest.getType())
+                );
+
+        return pathFinderBuilder
+                .setSource(sourceStation)
+                .setTarget(targetStation)
+                .newfind();
     }
 
     private Station getStation(Long stationId) {

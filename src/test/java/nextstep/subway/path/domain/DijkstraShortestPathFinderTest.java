@@ -85,12 +85,12 @@ class DijkstraShortestPathFinderTest {
         삼호선.addSection(남부터미널역, 양재역, 3L, 5L);
 
         PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder()
-                .addVertex(이호선.getStations())
+                .addNewVertex(이호선.getStations())
                 .addNewEdgeWeight(이호선.getSections().getSectionList(), PathSearchType.DISTANCE)
-                .addVertex(신분당선.getStations())
-                .addEdgeWeight(신분당선.getSections().getSectionList())
-                .addVertex(삼호선.getStations())
-                .addEdgeWeight(삼호선.getSections().getSectionList());
+                .addNewVertex(신분당선.getStations())
+                .addNewEdgeWeight(신분당선.getSections().getSectionList(), PathSearchType.DISTANCE)
+                .addNewVertex(삼호선.getStations())
+                .addNewEdgeWeight(삼호선.getSections().getSectionList(), PathSearchType.DISTANCE);
 
         // when
         NewPathResponse pathResponse = pathFinderBuilder
@@ -126,12 +126,12 @@ class DijkstraShortestPathFinderTest {
         삼호선.addSection(남부터미널역, 양재역, 3L, 5L);
 
         PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder()
-                .addVertex(이호선.getStations())
+                .addNewVertex(이호선.getStations())
                 .addNewEdgeWeight(이호선.getSections().getSectionList(), PathSearchType.DURATION)
-                .addVertex(신분당선.getStations())
-                .addEdgeWeight(신분당선.getSections().getSectionList())
-                .addVertex(삼호선.getStations())
-                .addEdgeWeight(삼호선.getSections().getSectionList());
+                .addNewVertex(신분당선.getStations())
+                .addNewEdgeWeight(신분당선.getSections().getSectionList(), PathSearchType.DURATION)
+                .addNewVertex(삼호선.getStations())
+                .addNewEdgeWeight(삼호선.getSections().getSectionList(), PathSearchType.DURATION);
 
         // when
         NewPathResponse pathResponse = pathFinderBuilder
