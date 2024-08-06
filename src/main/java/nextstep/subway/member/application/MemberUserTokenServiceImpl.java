@@ -1,5 +1,6 @@
 package nextstep.subway.member.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.auth.application.JwtTokenProvider;
 import nextstep.subway.auth.application.UserTokenService;
 import nextstep.subway.auth.application.dto.UserTokenRequest;
@@ -8,14 +9,10 @@ import nextstep.subway.member.domain.Member;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MemberUserTokenServiceImpl implements UserTokenService {
-    private JwtTokenProvider jwtTokenProvider;
-    private MemberService memberService;
-
-    public MemberUserTokenServiceImpl(JwtTokenProvider jwtTokenProvider, MemberService memberService) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.memberService = memberService;
-    }
+    private final JwtTokenProvider jwtTokenProvider;
+    private final MemberService memberService;
 
     @Override
     public String createToken(UserTokenRequest userTokenRequest) {

@@ -1,5 +1,6 @@
 package nextstep.subway.auth.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.auth.application.dto.GithubTokenRequest;
 import nextstep.subway.auth.application.dto.MemberTokenRequest;
 import nextstep.subway.auth.application.dto.TokenResponse;
@@ -7,12 +8,9 @@ import nextstep.subway.auth.application.dto.UserTokenRequest;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class TokenService {
-    private UserTokenServiceProvider userTokenService;
-
-    public TokenService(UserTokenServiceProvider userTokenService) {
-        this.userTokenService = userTokenService;
-    }
+    private final UserTokenServiceProvider userTokenService;
 
     public TokenResponse createToken(MemberTokenRequest request) {
         UserTokenRequest userTokenRequest = UserTokenRequest.fromMemberTokenRequest(request);

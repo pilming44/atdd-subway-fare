@@ -1,5 +1,6 @@
 package nextstep.subway.github.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.auth.application.JwtTokenProvider;
 import nextstep.subway.auth.application.MemberDetailsService;
 import nextstep.subway.auth.application.UserTokenService;
@@ -10,18 +11,11 @@ import nextstep.subway.github.domain.GithubClient;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GithubUserTokenServiceImpl implements UserTokenService {
-    private JwtTokenProvider jwtTokenProvider;
-    private GithubClient githubClient;
-    private MemberDetailsService memberDetailsService;
-
-    public GithubUserTokenServiceImpl(JwtTokenProvider jwtTokenProvider
-            , GithubClient githubClient
-            , MemberDetailsService memberDetailsService) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.githubClient = githubClient;
-        this.memberDetailsService = memberDetailsService;
-    }
+    private final JwtTokenProvider jwtTokenProvider;
+    private final GithubClient githubClient;
+    private final MemberDetailsService memberDetailsService;
 
     @Override
     public String createToken(UserTokenRequest userTokenRequest) {

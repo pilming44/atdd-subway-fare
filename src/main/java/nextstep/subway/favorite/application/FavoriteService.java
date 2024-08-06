@@ -1,5 +1,6 @@
 package nextstep.subway.favorite.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.auth.application.dto.LoginMember;
 import nextstep.subway.exception.IllegalFavoriteException;
 import nextstep.subway.favorite.application.dto.FavoriteRequest;
@@ -20,21 +21,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class FavoriteService {
-    private FavoriteRepository favoriteRepository;
-    private StationService stationService;
-    private PathService pathService;
-    private MemberService memberService;
-
-    public FavoriteService(FavoriteRepository favoriteRepository
-            , StationService stationService
-            , PathService pathService
-            , MemberService memberService) {
-        this.favoriteRepository = favoriteRepository;
-        this.stationService = stationService;
-        this.pathService = pathService;
-        this.memberService = memberService;
-    }
+    private final FavoriteRepository favoriteRepository;
+    private final StationService stationService;
+    private final PathService pathService;
+    private final MemberService memberService;
 
     @Transactional
     public Long createFavorite(LoginMember loginMember, FavoriteRequest request) {

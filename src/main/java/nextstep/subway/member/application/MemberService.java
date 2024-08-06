@@ -1,5 +1,6 @@
 package nextstep.subway.member.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.auth.application.dto.LoginMember;
 import nextstep.subway.exception.NoSuchMemberException;
 import nextstep.subway.member.application.dto.MemberRequest;
@@ -11,12 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class MemberService {
-    private MemberRepository memberRepository;
-
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+    private final MemberRepository memberRepository;
 
     @Transactional
     public MemberResponse createMember(MemberRequest request) {

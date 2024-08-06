@@ -1,17 +1,15 @@
 package nextstep.subway.auth.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.auth.application.dto.UserTokenRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class UserTokenServiceProvider {
-    private List<UserTokenService> userTokenServices;
-
-    public UserTokenServiceProvider(List<UserTokenService> userTokenServices) {
-        this.userTokenServices = userTokenServices;
-    }
+    private final List<UserTokenService> userTokenServices;
 
     public String createToken(UserTokenRequest userTokenRequest) {
         for (UserTokenService userTokenService : userTokenServices) {
