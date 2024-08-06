@@ -9,8 +9,8 @@ import nextstep.subway.station.domain.Station;
 import javax.persistence.*;
 
 @Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Section {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +27,15 @@ public class Section {
 
     private Long distance;
 
-    public Section(Line line, Station upStation, Station downStation, Long distance) {
+    private Long duration;
+
+    public Section(Line line, Station upStation, Station downStation, Long distance, Long duration) {
         validateStations(upStation, downStation);
         this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.duration = duration;
     }
 
     public boolean containsStation(Station station) {
@@ -48,5 +51,4 @@ public class Section {
     public void setLine(Line line) {
         this.line = line;
     }
-
 }

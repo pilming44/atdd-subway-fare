@@ -42,12 +42,13 @@ public final class AcceptanceTestUtil {
         return 역_생성(stationName).jsonPath().getLong("id");
     }
 
-    public static Long 노선_생성_후_id_추출(String name,
-                              String color,
-                              Long upStationId,
-                              Long downStationId,
-                              Long distance) {
-        ExtractableResponse<Response> 노선_생성_응답 = 노선_생성_Extract(노선_생성_매개변수(name, color, upStationId, downStationId, distance));
+    public static Long 노선_생성_후_id_추출(String name
+            , String color
+            , Long upStationId
+            , Long downStationId
+            , Long distance
+            , Long duration) {
+        ExtractableResponse<Response> 노선_생성_응답 = 노선_생성_Extract(노선_생성_매개변수(name, color, upStationId, downStationId, distance, duration));
         return 노선_생성_응답.jsonPath().getLong("id");
     }
 
@@ -73,24 +74,28 @@ public final class AcceptanceTestUtil {
             String color,
             Long upStationId,
             Long downStationId,
-            Long distance) {
+            Long distance,
+            Long duration) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
         params.put("upStationId", upStationId);
         params.put("downStationId", downStationId);
         params.put("distance", distance);
+        params.put("duration", duration);
         return params;
     }
 
     public static Map<String, Object> 구간_생성_매개변수(
             Long upStationId,
             Long downStationId,
-            Long distance) {
+            Long distance,
+            Long duration) {
         Map<String, Object> params = new HashMap<>();
         params.put("upStationId", upStationId);
         params.put("downStationId", downStationId);
         params.put("distance", distance);
+        params.put("duration", duration);
         return params;
     }
 

@@ -1,6 +1,5 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.line.domain.Newsection;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.path.application.dto.NewPathResponse;
 import nextstep.subway.path.application.dto.PathResponse;
@@ -43,7 +42,7 @@ public class PathFinderBuilder {
         return this;
     }
 
-    public PathFinderBuilder addNewEdgeWeight(List<Newsection> sections, PathSearchType type) {
+    public PathFinderBuilder addNewEdgeWeight(List<Section> sections, PathSearchType type) {
         sections.stream()
                 .forEach(s -> {
                     CustomWeightedEdge edge = new CustomWeightedEdge(type, s.getDistance(), s.getDuration());

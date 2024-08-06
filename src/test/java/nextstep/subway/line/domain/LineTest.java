@@ -33,7 +33,7 @@ class LineTest {
     @DisplayName("노선에 구간 추가")
     void 노선에_구간_추가() {
         // when
-        신분당선.addSection(신사역, 강남역, 10L);
+        신분당선.addSection(신사역, 강남역, 10L, 3L);
 
         // then
         Sections sections = 신분당선.getSections();
@@ -46,7 +46,7 @@ class LineTest {
     @DisplayName("노선 역 조회")
     void 노선_역_조회() {
         //given
-        신분당선.addSection(신사역, 강남역, 10L);
+        신분당선.addSection(신사역, 강남역, 10L, 3L);
 
         // when
         List<Station> stations = 신분당선.getStations();
@@ -61,8 +61,8 @@ class LineTest {
     @DisplayName("노선 구간 삭제")
     void 노선_구간_삭제() {
         // given
-        신분당선.addSection(신사역, 강남역, 10L);
-        신분당선.addSection(강남역, 판교역, 10L);
+        신분당선.addSection(신사역, 강남역, 10L, 3L);
+        신분당선.addSection(강남역, 판교역, 10L, 3L);
 
         // when
         신분당선.removeSection(판교역);
@@ -79,7 +79,7 @@ class LineTest {
     @DisplayName("노선에 구간이 하나뿐이라면 삭제 시 예외발생")
     void 노선에_구간이_하나뿐이라면_삭제_시_예외발생() {
         // given
-        신분당선.addSection(신사역, 강남역, 10L);
+        신분당선.addSection(신사역, 강남역, 10L, 3L);
 
         // when, then
         assertThatThrownBy(() -> 신분당선.removeSection(강남역))
@@ -101,10 +101,10 @@ class LineTest {
     @DisplayName("노선에 이미 등록된 역을 구간으로 추가 시 예외발생")
     void 노선에_이미_등록_된_역을_구간으로_추가_시_예외발생() {
         // given
-        신분당선.addSection(신사역, 강남역, 10L);
+        신분당선.addSection(신사역, 강남역, 10L, 3L);
 
         // when, then
-        assertThatThrownBy(() -> 신분당선.addableSection(강남역, 신사역, 10L))
+        assertThatThrownBy(() -> 신분당선.addableSection(강남역, 신사역, 10L, 3L))
                 .isInstanceOf(IllegalSectionException.class)
                 .hasMessage("이미 등록되어 있는 역은 노선에 추가할 수 없습니다.");
     }
@@ -113,8 +113,8 @@ class LineTest {
     @DisplayName("노선 중간 구간 삭제")
     void 노선_중간_구간_삭제() {
         // given
-        신분당선.addSection(신사역, 강남역, 10L);
-        신분당선.addSection(강남역, 판교역, 10L);
+        신분당선.addSection(신사역, 강남역, 10L, 3L);
+        신분당선.addSection(강남역, 판교역, 10L, 3L);
 
         // when
         신분당선.removeSection(강남역);

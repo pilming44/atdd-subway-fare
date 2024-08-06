@@ -23,12 +23,6 @@ public class LineController {
         return ResponseEntity.created(URI.create("/lines/" + lineResponse.getId())).body(lineResponse);
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<NewlineResponse> NewcreateLine(@RequestBody NewlineRequest lineRequest) {
-        NewlineResponse lineResponse = lineService.saveNewLine(lineRequest);
-        return ResponseEntity.created(URI.create("/lines/" + lineResponse.getId())).body(lineResponse);
-    }
-
     @GetMapping
     public ResponseEntity<List<LineResponse>> showLines() {
         return ResponseEntity.ok().body(lineService.findAllLines());
@@ -54,12 +48,6 @@ public class LineController {
     @PostMapping("/{id}/sections")
     public ResponseEntity<LineResponse> createLineSection(@PathVariable Long id, @RequestBody SectionRequest sectionRequest) {
         LineResponse lineResponse = lineService.addSection(id, sectionRequest);
-        return ResponseEntity.created(URI.create("/lines/" + lineResponse.getId() + "/sections")).body(lineResponse);
-    }
-
-    @PostMapping("/{id}/sections/new")
-    public ResponseEntity<NewlineResponse> newcreateLineSection(@PathVariable Long id, @RequestBody NewsectionRequest sectionRequest) {
-        NewlineResponse lineResponse = lineService.newaddSection(id, sectionRequest);
         return ResponseEntity.created(URI.create("/lines/" + lineResponse.getId() + "/sections")).body(lineResponse);
     }
 

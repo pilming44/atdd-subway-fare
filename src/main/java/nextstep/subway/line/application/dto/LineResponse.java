@@ -1,5 +1,6 @@
 package nextstep.subway.line.application.dto;
 
+import lombok.*;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.station.domain.Station;
@@ -8,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LineResponse {
     private Long id;
     private String name;
@@ -28,17 +33,6 @@ public class LineResponse {
 
     public List<StationResponse> getStations() {
         return stations;
-    }
-
-    private LineResponse() {
-
-    }
-
-    private LineResponse(Long id, String name, String color, List<StationResponse> stations) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-        this.stations = stations;
     }
 
     public static LineResponse from(Line line) {

@@ -1,11 +1,16 @@
 package nextstep.subway.line.domain;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import nextstep.subway.station.domain.Station;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Line {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +22,6 @@ public class Line {
 
     @Embedded
     private Sections sections = new Sections();
-
-    protected Line() {
-    }
 
     public Line(Long id, String name, String color) {
         this.id = id;
@@ -36,32 +38,16 @@ public class Line {
         return sections.getStations();
     }
 
-    public boolean addableSection(Station upStation, Station downStation, Long distance) {
-        return sections.addableSection(new Section(this, upStation, downStation, distance));
+    public boolean addableSection(Station upStation, Station downStation, Long distance, Long duration) {
+        return sections.addableSection(new Section(this, upStation, downStation, distance, duration));
     }
 
-    public void addSection(Station upStation, Station downStation, Long distance) {
-        this.sections.addSection(new Section(this, upStation, downStation, distance));
+    public void addSection(Station upStation, Station downStation, Long distance, Long duration) {
+        this.sections.addSection(new Section(this, upStation, downStation, distance, duration));
     }
 
     public void removeSection(Station station) {
         sections.removeSectionByStation(station);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public Sections getSections() {
-        return sections;
     }
 
     public void setName(String name) {

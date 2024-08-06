@@ -5,8 +5,6 @@ import nextstep.subway.exception.IllegalPathException;
 import nextstep.subway.exception.NoSuchStationException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
-import nextstep.subway.line.domain.Newline;
-import nextstep.subway.line.domain.NewlineRepository;
 import nextstep.subway.path.application.dto.NewPathRequest;
 import nextstep.subway.path.application.dto.NewPathResponse;
 import nextstep.subway.path.application.dto.PathRequest;
@@ -25,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PathService {
     private final LineRepository lineRepository;
-    private final NewlineRepository newlineRepository;
     private final StationRepository stationRepository;
 
     public PathResponse getPathOrThrow(PathRequest pathRequest) {
@@ -60,7 +57,7 @@ public class PathService {
         Station sourceStation = getStation(pathRequest.getSource());
         Station targetStation = getStation(pathRequest.getTarget());
 
-        List<Newline> allLines = newlineRepository.findAll();
+        List<Line> allLines = lineRepository.findAll();
 
         PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder();
 
@@ -84,7 +81,7 @@ public class PathService {
         Station sourceStation = getStation(pathRequest.getSource());
         Station targetStation = getStation(pathRequest.getTarget());
 
-        List<Newline> allLines = newlineRepository.findAll();
+        List<Line> allLines = lineRepository.findAll();
 
         PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder();
 

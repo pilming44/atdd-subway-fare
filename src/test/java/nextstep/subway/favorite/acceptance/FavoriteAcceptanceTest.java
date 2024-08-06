@@ -41,12 +41,12 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         남부터미널역Id = 역_생성_후_id_추출("남부터미널역");
         미지역Id = 역_생성_후_id_추출("미지역");
 
-        노선_생성_Extract(노선_생성_매개변수("2호선", "bg-green-600", 교대역Id, 강남역Id, 10L));
-        노선_생성_Extract(노선_생성_매개변수("신분당선", "bg-gre-600", 강남역Id, 양재역Id, 10L));
+        노선_생성_Extract(노선_생성_매개변수("2호선", "bg-green-600", 교대역Id, 강남역Id, 10L, 5L));
+        노선_생성_Extract(노선_생성_매개변수("신분당선", "bg-gre-600", 강남역Id, 양재역Id, 10L, 5L));
 
-        ExtractableResponse<Response> 삼호선_생성_응답 = 노선_생성_Extract(노선_생성_매개변수("3호선", "bg-green-600", 교대역Id, 남부터미널역Id, 2L));
+        ExtractableResponse<Response> 삼호선_생성_응답 = 노선_생성_Extract(노선_생성_매개변수("3호선", "bg-green-600", 교대역Id, 남부터미널역Id, 2L, 5L));
         long 삼호선Id = 삼호선_생성_응답.jsonPath().getLong("id");
-        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(남부터미널역Id, 양재역Id, 3L), 삼호선Id);
+        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(남부터미널역Id, 양재역Id, 3L, 5L), 삼호선Id);
 
         회원_생성_요청(EMAIL, PASSWORD, AGE);
         인증_토큰 = 로그인_토큰_생성(EMAIL, PASSWORD, AGE);

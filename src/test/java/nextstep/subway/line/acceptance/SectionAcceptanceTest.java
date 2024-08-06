@@ -41,10 +41,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선에 새로운 구간 추가")
     void 구간등록_case1() {
         // given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
 
-        Map<String, Object> newSection = 구간_생성_매개변수(강남역Id, 판교역Id, 10L);
+        Map<String, Object> newSection = 구간_생성_매개변수(강남역Id, 판교역Id, 10L, 5L);
 
 
         // when
@@ -67,10 +67,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선에 이미 등록된 역을 하행역으로 가진 구간 추가시 예외 발생")
     void 구간등록_case3() {
         // given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
 
-        Map<String, Object> newSection = 구간_생성_매개변수(강남역Id, 신사역Id, 10L);
+        Map<String, Object> newSection = 구간_생성_매개변수(강남역Id, 신사역Id, 10L, 5L);
 
         // when
         ExtractableResponse<Response> response = 노선에_새로운_구간_추가_Extract(newSection, lineId);
@@ -92,10 +92,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선의 마지막 구간 삭제")
     void 구간삭제_case1() {
         // given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
 
-        Map<String, Object> newSection = 구간_생성_매개변수(강남역Id, 판교역Id, 10L);
+        Map<String, Object> newSection = 구간_생성_매개변수(강남역Id, 판교역Id, 10L, 5L);
 
         노선에_새로운_구간_추가_Extract(newSection, lineId);
 
@@ -119,10 +119,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선의 구간이 아닌 다른 구간 삭제 시 예외 발생")
     void 구간삭제_case2() {
         // given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
 
-        Map<String, Object> newSection = 구간_생성_매개변수(강남역Id, 판교역Id, 10L);
+        Map<String, Object> newSection = 구간_생성_매개변수(강남역Id, 판교역Id, 10L, 5L);
 
         노선에_새로운_구간_추가_Extract(newSection, lineId);
 
@@ -147,7 +147,7 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선에 구간이 하나뿐일때 구간 삭제 시 예외 발생")
     void 구간삭제_case4() {
         // given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
 
         // when
@@ -170,10 +170,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선에 역 추가 시 노선 가운데 추가 할 수 있다.")
     void 노선_중간에_구간_추가() {
         // given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 강남역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
 
-        Map<String, Object> newSection = 구간_생성_매개변수(신사역Id, 논현역Id, 4L);
+        Map<String, Object> newSection = 구간_생성_매개변수(신사역Id, 논현역Id, 4L, 5L);
 
         // when
         ExtractableResponse<Response> response = 노선에_새로운_구간_추가_Extract(newSection, lineId);
@@ -196,10 +196,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선에 역 추가 시 노선 처음에 추가 할 수 있다.")
     void 노선_맨_앞에_구간_추가() {
         // given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 논현역Id, 강남역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 논현역Id, 강남역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
 
-        Map<String, Object> newSection = 구간_생성_매개변수(신사역Id, 논현역Id, 4L);
+        Map<String, Object> newSection = 구간_생성_매개변수(신사역Id, 논현역Id, 4L, 5L);
 
         // when
         ExtractableResponse<Response> response = 노선에_새로운_구간_추가_Extract(newSection, lineId);
@@ -222,12 +222,12 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("이미 등록되어있는 역은 노선에 등록될 수 없다.")
     void 중복된_역_등록_불가능() {
         // given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
-        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(논현역Id, 강남역Id, 4L), lineId);
+        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(논현역Id, 강남역Id, 4L, 5L), lineId);
 
         // when
-        ExtractableResponse<Response> response = 노선에_새로운_구간_추가_Extract(구간_생성_매개변수(강남역Id, 신사역Id, 4L), lineId);
+        ExtractableResponse<Response> response = 노선에_새로운_구간_추가_Extract(구간_생성_매개변수(강남역Id, 신사역Id, 4L, 5L), lineId);
 
         // then
         잘못된_요청(response);
@@ -242,9 +242,9 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선에 등록된 역 제거 시 해당 역이 노선 가운데 있어도 제거할 수 있다.")
     void 가운데_구간_삭제() {
         //given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
-        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(논현역Id, 강남역Id, 4L), lineId);
+        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(논현역Id, 강남역Id, 4L, 5L), lineId);
 
         //when
         ExtractableResponse<Response> response = getSectionDeletionExtract(lineId, 논현역Id);
@@ -267,9 +267,9 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선에 등록된 역 제거 시 해당 역이 상행 종점역이어도 제거할 수 있다.")
     void 상행_종점_구간_삭제() {
         //given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
-        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(논현역Id, 강남역Id, 4L), lineId);
+        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(논현역Id, 강남역Id, 4L, 5L), lineId);
 
         //when
         ExtractableResponse<Response> response = getSectionDeletionExtract(lineId, 신사역Id);
@@ -291,10 +291,10 @@ public class SectionAcceptanceTest extends AcceptanceTest {
     @DisplayName("노선에 등록되지 않는 구간 삭제 시 에러가 발생한다.")
     void 존재하지않는_구간_삭제() {
         //given
-        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L);
+        Map<String, Object> 신분당선_생성_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L, 5L);
         long lineId = 노선_생성_후_id_추출(신분당선_생성_매개변수);
-        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(논현역Id, 강남역Id, 4L), lineId);
-        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(강남역Id, 판교역Id, 5L), lineId);
+        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(논현역Id, 강남역Id, 4L, 5L), lineId);
+        노선에_새로운_구간_추가_Extract(구간_생성_매개변수(강남역Id, 판교역Id, 5L, 5L), lineId);
 
         //when
         ExtractableResponse<Response> response = getSectionDeletionExtract(lineId, 광교역Id);

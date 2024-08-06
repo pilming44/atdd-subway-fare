@@ -120,10 +120,12 @@ public class Sections {
 
     private void combineFrontAndBackSection(Section frontSection, Section backSection) {
         Long distanceSum = frontSection.getDistance() + backSection.getDistance();
+        Long durationSum = frontSection.getDuration() + backSection.getDuration();
         Section combinedSection = new Section(frontSection.getLine(),
                 frontSection.getUpStation(),
                 backSection.getDownStation(),
-                distanceSum);
+                distanceSum,
+                durationSum);
 
         int frontSectionIndex = sectionList.indexOf(frontSection);
 
@@ -147,7 +149,11 @@ public class Sections {
         sectionList.clear();
         sectionList.add(section);
         for (Section s : sections) {
-            sectionList.add(new Section(s.getLine(), s.getUpStation(), s.getDownStation(), s.getDistance()));
+            sectionList.add(new Section(s.getLine(),
+                    s.getUpStation(),
+                    s.getDownStation(),
+                    s.getDistance(),
+                    s.getDuration()));
         }
     }
 
@@ -159,17 +165,25 @@ public class Sections {
         Station newUpStation = section.getUpStation();
         Station newDownStation = section.getDownStation();
         Long newDistance = section.getDistance();
+        Long newDuration = section.getDuration();
 
         Section sectionByUpStation = findSectionByUpStation(section.getUpStation())
                 .orElseThrow(() -> new IllegalSectionException("구간을 추가할 수 없습니다."));
 
         int oldIndex = sectionList.indexOf(sectionByUpStation);
 
-        Section rightSection = new Section(section.getLine(), newDownStation, sectionByUpStation.getDownStation(),
-                sectionByUpStation.getDistance() - newDistance);
+        Section rightSection = new Section(section.getLine(),
+                newDownStation,
+                sectionByUpStation.getDownStation(),
+                sectionByUpStation.getDistance() - newDistance,
+                sectionByUpStation.getDuration() - newDuration);
         sectionList.set(oldIndex, rightSection);
 
-        Section leftSection = new Section(section.getLine(), newUpStation, newDownStation, newDistance);
+        Section leftSection = new Section(section.getLine(),
+                newUpStation,
+                newDownStation,
+                newDistance,
+                newDuration);
         sectionList.add(oldIndex, leftSection);
     }
 

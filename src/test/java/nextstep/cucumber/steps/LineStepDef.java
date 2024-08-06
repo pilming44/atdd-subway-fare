@@ -32,6 +32,7 @@ public class LineStepDef implements En {
                     params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
                     params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
                     params.put("distance", it.get("distance"));
+                    params.put("duration", it.get("duration"));
                     ExtractableResponse<Response> response = RestAssured.given().log().all()
                             .body(params)
                             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -53,56 +54,13 @@ public class LineStepDef implements En {
                     params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
                     params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
                     params.put("distance", it.get("distance"));
+                    params.put("duration", it.get("duration"));
                     LineResponse line = (LineResponse) context.store.get(lineName);
                     RestAssured.given().log().all()
                             .body(params)
                             .contentType(MediaType.APPLICATION_JSON_VALUE)
                             .when()
                             .post("/lines/{lineId}/sections", line.getId())
-                            .then().log().all();
-                });
-    }
-
-    @Given("새 지하철 노선들을 생성 요청하고")
-    public void 새_지하철_노선들_생성(DataTable table) {
-        List<Map<String, String>> maps = table.asMaps();
-        maps.stream()
-                .forEach(it -> {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("name", it.get("name"));
-                    params.put("color", it.get("color"));
-                    params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
-                    params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
-                    params.put("distance", it.get("distance"));
-                    params.put("duration", it.get("duration"));
-                    ExtractableResponse<Response> response = RestAssured.given().log().all()
-                            .body(params)
-                            .contentType(MediaType.APPLICATION_JSON_VALUE)
-                            .when()
-                            .post("/lines/new")
-                            .then().log().all()
-                            .extract();
-                    context.store.put(params.get("name"), (new ObjectMapper()).convertValue(response.jsonPath().get(), LineResponse.class));
-                });
-    }
-
-    @Given("새 지하철 구간을 등록 요청하고")
-    public void 새_지하철_구간_등록_요청(DataTable table) {
-        List<Map<String, String>> maps = table.asMaps();
-        maps.stream()
-                .forEach(it -> {
-                    String lineName = it.get("lineName");
-                    Map<String, String> params = new HashMap<>();
-                    params.put("upStationId", ((StationResponse) context.store.get(it.get("upStation"))).getId().toString());
-                    params.put("downStationId", ((StationResponse) context.store.get(it.get("downStation"))).getId().toString());
-                    params.put("distance", it.get("distance"));
-                    params.put("duration", it.get("duration"));
-                    LineResponse line = (LineResponse) context.store.get(lineName);
-                    RestAssured.given().log().all()
-                            .body(params)
-                            .contentType(MediaType.APPLICATION_JSON_VALUE)
-                            .when()
-                            .post("/lines/{lineId}/sections/new", line.getId())
                             .then().log().all();
                 });
     }
