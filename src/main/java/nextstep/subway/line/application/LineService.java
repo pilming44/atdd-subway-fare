@@ -1,13 +1,14 @@
 package nextstep.subway.line.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.exception.IllegalSectionException;
 import nextstep.subway.exception.NoSuchLineException;
 import nextstep.subway.exception.NoSuchStationException;
-import nextstep.subway.line.application.dto.LineRequest;
-import nextstep.subway.line.application.dto.LineResponse;
-import nextstep.subway.line.application.dto.SectionRequest;
+import nextstep.subway.line.application.dto.*;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
+import nextstep.subway.line.domain.Newline;
+import nextstep.subway.line.domain.NewlineRepository;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class LineService {
     private final LineRepository lineRepository;
     private final StationRepository stationRepository;
-
-    public LineService(LineRepository lineRepository, StationRepository stationRepository) {
-        this.lineRepository = lineRepository;
-        this.stationRepository = stationRepository;
-    }
+    private final NewlineRepository newlineRepository;
 
     @Transactional
     public LineResponse saveLine(LineRequest lineRequest) {
@@ -43,6 +41,23 @@ public class LineService {
         line.addSection(upStation, downStation, lineRequest.getDistance());
 
         return LineResponse.from(line);
+    }
+
+    @Transactional
+    public NewlineResponse saveNewLine(NewlineRequest lineRequest) {
+        Station upStation = null;
+        Station downStation = null;
+
+        if (lineRequest.getUpStationId() != null) {
+            upStation = getStation(lineRequest.getUpStationId());
+        }
+        if (lineRequest.getDownStationId() != null) {
+            downStation = getStation(lineRequest.getDownStationId());
+        }
+        Newline line = newlineRepository.save(new Newline(lineRequest.getName(), lineRequest.getColor()));
+        line.addSection(upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
+
+        return NewlineResponse.from(line);
     }
 
     public List<LineResponse> findAllLines() {
@@ -84,6 +99,23 @@ public class LineService {
         line.addSection(upStation, downStation, sectionRequest.getDistance());
 
         return LineResponse.from(line);
+    }
+
+    @Transactional
+    public NewlineResponse newaddSection(Long id, NewsectionRequest sectionRequest) {
+        Newline line = newlineRepository.findById(id)
+                .orElseThrow(() -> new NoSuchLineException("존재하지 않는 노선입니다."));
+        Station upStation = getStation(sectionRequest.getUpStationId());
+
+        Station downStation = getStation(sectionRequest.getDownStationId());
+
+        if (!line.addableSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration())) {
+            throw new IllegalSectionException("추가할 수 없는 구간입니다.");
+        }
+
+        line.addSection(upStation, downStation, sectionRequest.getDistance(), sectionRequest.getDuration());
+
+        return NewlineResponse.from(line);
     }
 
     @Transactional

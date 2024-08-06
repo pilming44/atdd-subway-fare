@@ -1,5 +1,6 @@
 package nextstep.subway.station.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.exception.NoSuchStationException;
 import nextstep.subway.station.application.dto.StationRequest;
 import nextstep.subway.station.application.dto.StationResponse;
@@ -13,12 +14,9 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class StationService {
-    private StationRepository stationRepository;
-
-    public StationService(StationRepository stationRepository) {
-        this.stationRepository = stationRepository;
-    }
+    private final StationRepository stationRepository;
 
     @Transactional
     public StationResponse saveStation(StationRequest stationRequest) {

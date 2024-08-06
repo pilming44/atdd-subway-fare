@@ -1,9 +1,7 @@
 package nextstep.subway.line.ui;
 
 import nextstep.subway.line.application.LineService;
-import nextstep.subway.line.application.dto.LineRequest;
-import nextstep.subway.line.application.dto.LineResponse;
-import nextstep.subway.line.application.dto.SectionRequest;
+import nextstep.subway.line.application.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +20,12 @@ public class LineController {
     @PostMapping
     public ResponseEntity<LineResponse> createLine(@RequestBody LineRequest lineRequest) {
         LineResponse lineResponse = lineService.saveLine(lineRequest);
+        return ResponseEntity.created(URI.create("/lines/" + lineResponse.getId())).body(lineResponse);
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<NewlineResponse> NewcreateLine(@RequestBody NewlineRequest lineRequest) {
+        NewlineResponse lineResponse = lineService.saveNewLine(lineRequest);
         return ResponseEntity.created(URI.create("/lines/" + lineResponse.getId())).body(lineResponse);
     }
 
@@ -50,6 +54,12 @@ public class LineController {
     @PostMapping("/{id}/sections")
     public ResponseEntity<LineResponse> createLineSection(@PathVariable Long id, @RequestBody SectionRequest sectionRequest) {
         LineResponse lineResponse = lineService.addSection(id, sectionRequest);
+        return ResponseEntity.created(URI.create("/lines/" + lineResponse.getId() + "/sections")).body(lineResponse);
+    }
+
+    @PostMapping("/{id}/sections/new")
+    public ResponseEntity<NewlineResponse> newcreateLineSection(@PathVariable Long id, @RequestBody NewsectionRequest sectionRequest) {
+        NewlineResponse lineResponse = lineService.newaddSection(id, sectionRequest);
         return ResponseEntity.created(URI.create("/lines/" + lineResponse.getId() + "/sections")).body(lineResponse);
     }
 

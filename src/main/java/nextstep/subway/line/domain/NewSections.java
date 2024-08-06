@@ -4,6 +4,7 @@ import nextstep.subway.exception.IllegalSectionException;
 import nextstep.subway.station.domain.Station;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Embeddable
 public class NewSections {
     private final int FIRST_OR_END_SECTION_INDEX = 0;
     private final int FRONT_SECTION_INDEX = 0;

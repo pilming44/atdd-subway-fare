@@ -7,6 +7,7 @@ import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,11 +26,13 @@ public class PathController {
     }
 
     @GetMapping("/distance")
-    public ResponseEntity<NewPathResponse> getDistancePath(NewPathRequest pathRequest) {
-        return ResponseEntity.ok().body(pathService.getDistancePathOrThrow(pathRequest));
+    public ResponseEntity<NewPathResponse> getDistancePath(@ModelAttribute NewPathRequest pathRequest) {
+        NewPathResponse distancePath = pathService.getDistancePathOrThrow(pathRequest);
+        return ResponseEntity.ok().body(distancePath);
     }
     @GetMapping("/duration")
-    public ResponseEntity<NewPathResponse> getDurationPath(NewPathRequest pathRequest) {
-        return ResponseEntity.ok().body(pathService.getDurationPathOrThrow(pathRequest));
+    public ResponseEntity<NewPathResponse> getDurationPath(@ModelAttribute NewPathRequest pathRequest) {
+        NewPathResponse durationPath = pathService.getDurationPathOrThrow(pathRequest);
+        return ResponseEntity.ok().body(durationPath);
     }
 }

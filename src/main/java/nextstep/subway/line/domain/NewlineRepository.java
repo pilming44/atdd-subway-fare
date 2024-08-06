@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface NewlineRepository extends JpaRepository<Newline, Long> {
     @Override
-    @Query("SELECT DISTINCT l FROM Line l " +
+    @Query("SELECT DISTINCT l FROM Newline l " +
             "LEFT JOIN FETCH l.sections s " +
             "LEFT JOIN FETCH s.sectionList ss " +
             "LEFT JOIN FETCH ss.upStation " +
@@ -17,7 +17,7 @@ public interface NewlineRepository extends JpaRepository<Newline, Long> {
     List<Newline> findAll();
 
     @Override
-    @Query("SELECT DISTINCT l FROM Line l " +
+    @Query("SELECT DISTINCT l FROM Newline l " +
             "LEFT JOIN FETCH l.sections s " +
             "LEFT JOIN FETCH s.sectionList ss " +
             "LEFT JOIN FETCH ss.upStation " +

@@ -1,5 +1,6 @@
 package nextstep.subway.path.application;
 
+import lombok.RequiredArgsConstructor;
 import nextstep.subway.exception.IllegalPathException;
 import nextstep.subway.exception.NoSuchStationException;
 import nextstep.subway.line.domain.Line;
@@ -21,16 +22,11 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class PathService {
     private final LineRepository lineRepository;
     private final NewlineRepository newlineRepository;
     private final StationRepository stationRepository;
-
-    public PathService(LineRepository lineRepository, NewlineRepository newlineRepository,StationRepository stationRepository) {
-        this.lineRepository = lineRepository;
-        this.newlineRepository = newlineRepository;
-        this.stationRepository = stationRepository;
-    }
 
     public PathResponse getPathOrThrow(PathRequest pathRequest) {
         if (pathRequest.getSource() == null || pathRequest.getTarget() == null) {
