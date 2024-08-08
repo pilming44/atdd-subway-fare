@@ -91,11 +91,11 @@ public class LineService {
 
     private Line getLine(Long id) {
         return lineRepository.findById(id)
-                .orElseThrow(() -> new NoSuchLineException("존재하지 않는 노선입니다."));
+                .orElseThrow(() -> new NoSuchLineException());
     }
 
     private Station getStation(Long stationId) {
         return stationRepository.findById(stationId)
-                .orElseThrow(() -> new NoSuchStationException("존재하지 않는 역입니다."));
+                .orElseThrow(() -> new NoSuchStationException());
     }
 }

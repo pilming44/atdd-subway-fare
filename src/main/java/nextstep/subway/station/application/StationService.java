@@ -32,7 +32,7 @@ public class StationService {
 
     public Station findStationByIdOrThrow(Long id) {
         return stationRepository.findById(id)
-                .orElseThrow(() -> new NoSuchStationException("존재하지 않는 역입니다."));
+                .orElseThrow(() -> new NoSuchStationException());
     }
 
     @Transactional

@@ -49,6 +49,6 @@ public class PathService {
 
     private Station getStation(Long stationId) {
         return stationRepository.findById(stationId)
-                .orElseThrow(() -> new NoSuchStationException("존재하지 않는 역입니다."));
+                .orElseThrow(() -> new NoSuchStationException());
     }
 }

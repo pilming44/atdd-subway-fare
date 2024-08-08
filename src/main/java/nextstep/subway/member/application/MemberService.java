@@ -24,14 +24,14 @@ public class MemberService {
 
     public MemberResponse findMember(Long id) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new NoSuchMemberException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new NoSuchMemberException());
         return MemberResponse.of(member);
     }
 
     @Transactional
     public void updateMember(Long id, MemberRequest param) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new NoSuchMemberException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new NoSuchMemberException());
         member.update(param.toMember());
     }
 
@@ -42,13 +42,13 @@ public class MemberService {
 
     public Member findMemberByEmailOrThrow(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new NoSuchMemberException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new NoSuchMemberException());
     }
 
     public MemberResponse findMe(LoginMember loginMember) {
         return memberRepository.findByEmail(loginMember.getEmail())
                 .map(it -> MemberResponse.of(it))
-                .orElseThrow(() -> new NoSuchMemberException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new NoSuchMemberException());
     }
 
     @Transactional

@@ -1,7 +1,7 @@
 package nextstep.subway.exception;
 
 public class NoSuchStationException extends RuntimeException {
-    public NoSuchStationException(String message) {
-        super(message);
+    public NoSuchStationException() {
+        super("존재하지 않는 역입니다.");
     }
 }
