@@ -1,6 +1,8 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Section;
+import nextstep.subway.line.domain.Sections;
 import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.application.dto.PathSearchType;
 import nextstep.subway.station.domain.Station;
@@ -19,17 +21,27 @@ public class PathFinderBuilder {
         this.routeMap = new WeightedMultigraph<>(CustomWeightedEdge.class);
     }
 
-    public PathFinderBuilder addVertex(List<Station> stations) {
+    public PathFinderBuilder addPath(Line line, PathSearchType type) {
+        addVertex(line.getStations());
+
+        Sections sections = line.getSections();
+
+        addEdgeWeight(sections.getSectionList(), type);
+
+        return this;
+    }
+
+    private PathFinderBuilder addVertex(List<Station> stations) {
         stations.forEach(this.routeMap::addVertex);
         return this;
     }
 
-    public PathFinderBuilder addEdgeWeight(List<Section> sections, PathSearchType type) {
+    private PathFinderBuilder addEdgeWeight(List<Section> sections, PathSearchType type) {
         sections.forEach(s -> {
-                    CustomWeightedEdge edge = new CustomWeightedEdge(type, s.getDistance(), s.getDuration());
-                    this.routeMap.addEdge(s.getUpStation(), s.getDownStation(), edge);
-                    this.routeMap.setEdgeWeight(edge, edge.getWeight());
-                });
+            CustomWeightedEdge edge = new CustomWeightedEdge(type, s.getDistance(), s.getDuration());
+            this.routeMap.addEdge(s.getUpStation(), s.getDownStation(), edge);
+            this.routeMap.setEdgeWeight(edge, edge.getWeight());
+        });
 
         return this;
     }
