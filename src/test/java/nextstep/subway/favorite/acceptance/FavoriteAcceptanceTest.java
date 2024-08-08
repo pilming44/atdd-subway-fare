@@ -326,5 +326,4 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract();
     }
-
 }
