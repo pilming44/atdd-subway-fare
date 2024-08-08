@@ -35,8 +35,7 @@ public class PathService {
 
         PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder();
 
-        allLines.stream()
-                .forEach(l -> pathFinderBuilder
+        allLines.forEach(l -> pathFinderBuilder
                         .addVertex(l.getStations())
                         .addEdgeWeight(l.getSections().getSectionList(), pathRequest.getType())
                 );

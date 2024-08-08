@@ -18,7 +18,7 @@ public class CustomWeightedEdge extends DefaultWeightedEdge {
 
     @Override
     protected double getWeight() {
-        if (type == PathSearchType.DURATION) {
+        if (type.isDuration()) {
             return duration.doubleValue();
         }
         return distance.doubleValue();

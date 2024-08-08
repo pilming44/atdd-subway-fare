@@ -23,8 +23,7 @@ public class LineStepDef implements En {
     @Given("지하철 노선들을 생성 요청하고")
     public void 지하철_노선들_생성(DataTable table) {
         List<Map<String, String>> maps = table.asMaps();
-        maps.stream()
-                .forEach(it -> {
+        maps.forEach(it -> {
                     Long upStationId = ((StationResponse) context.store.get(it.get("upStation"))).getId();
                     Long downStationId = ((StationResponse) context.store.get(it.get("downStation"))).getId();
 
@@ -45,8 +44,7 @@ public class LineStepDef implements En {
     @Given("지하철 구간을 등록 요청하고")
     public void 지하철_구간_등록_요청(DataTable table) {
         List<Map<String, String>> maps = table.asMaps();
-        maps.stream()
-                .forEach(it -> {
+        maps.forEach(it -> {
                     String lineName = it.get("lineName");
 
                     Long upStationId = ((StationResponse) context.store.get(it.get("upStation"))).getId();

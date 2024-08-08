@@ -20,13 +20,12 @@ public class PathFinderBuilder {
     }
 
     public PathFinderBuilder addVertex(List<Station> stations) {
-        stations.stream().forEach(this.routeMap::addVertex);
+        stations.forEach(this.routeMap::addVertex);
         return this;
     }
 
     public PathFinderBuilder addEdgeWeight(List<Section> sections, PathSearchType type) {
-        sections.stream()
-                .forEach(s -> {
+        sections.forEach(s -> {
                     CustomWeightedEdge edge = new CustomWeightedEdge(type, s.getDistance(), s.getDuration());
                     this.routeMap.addEdge(s.getUpStation(), s.getDownStation(), edge);
                     this.routeMap.setEdgeWeight(edge, edge.getWeight());

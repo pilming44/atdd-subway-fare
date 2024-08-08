@@ -29,8 +29,7 @@ public class StationStepDef implements En {
     @Given("지하철역들을 생성 요청하고")
     public void 지하철_역들_생성_요청(DataTable table) {
         List<Map<String, String>> maps = table.asMaps();
-        maps.stream()
-                .forEach(params -> {
+        maps.forEach(params -> {
                     ExtractableResponse<Response> response = 역_생성(params.get("name"));
                     context.store.put(params.get("name")
                             , (new ObjectMapper()).convertValue(response.jsonPath().get(), StationResponse.class));
