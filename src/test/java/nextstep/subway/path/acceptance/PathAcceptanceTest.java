@@ -1,8 +1,9 @@
 package nextstep.subway.path.acceptance;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.path.application.dto.PathRequest;
+import nextstep.subway.path.application.dto.PathSearchType;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,14 +50,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         long 삼호선Id = 노선_생성_후_id_추출("3호선", "bg-green-600", 교대역Id, 남부터미널역Id, 2L, 5L);
         노선에_새로운_구간_추가_Extract(구간_생성_매개변수(남부터미널역Id, 양재역Id, 3L, 5L), 삼호선Id);
 
+        PathRequest pathRequest = new PathRequest(교대역Id, 양재역Id, PathSearchType.DISTANCE);
+
         // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .queryParam("source", 교대역Id)
-                .queryParam("target", 양재역Id)
-                .queryParam("type", SEARCH_TYPE_DISTANCE)
-                .when().get("/paths")
-                .then().log().all()
-                .extract();
+        ExtractableResponse<Response> response = 노선_경로_조회(pathRequest);
 
         // then
         List<StationResponse> stations = response.jsonPath().getList("stations", StationResponse.class);
@@ -71,6 +68,8 @@ public class PathAcceptanceTest extends AcceptanceTest {
         assertThat(duration).isEqualTo(10L);
     }
 
+
+
     @Test
     @DisplayName("출발역과 도착역의 최소 소요시간 경로를 조회한다.")
     void 최소_소요시간_경로_조회() {
@@ -80,14 +79,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         long 삼호선Id = 노선_생성_후_id_추출("3호선", "bg-green-600", 교대역Id, 남부터미널역Id, 2L, 5L);
         노선에_새로운_구간_추가_Extract(구간_생성_매개변수(남부터미널역Id, 양재역Id, 3L, 5L), 삼호선Id);
 
+        PathRequest pathRequest = new PathRequest(교대역Id, 양재역Id, PathSearchType.DURATION);
+
         // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .queryParam("source", 교대역Id)
-                .queryParam("target", 양재역Id)
-                .queryParam("type", SEARCH_TYPE_DURATION)
-                .when().get("/paths")
-                .then().log().all()
-                .extract();
+        ExtractableResponse<Response> response = 노선_경로_조회(pathRequest);
 
         // then
         List<StationResponse> stations = response.jsonPath().getList("stations", StationResponse.class);

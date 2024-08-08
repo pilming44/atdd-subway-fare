@@ -6,20 +6,19 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java8.En;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.station.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
+import static nextstep.subway.utils.AcceptanceTestUtil.역_목록_조회;
+import static nextstep.subway.utils.AcceptanceTestUtil.역_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StationStepDef implements En {
@@ -32,13 +31,7 @@ public class StationStepDef implements En {
         List<Map<String, String>> maps = table.asMaps();
         maps.stream()
                 .forEach(params -> {
-                    ExtractableResponse<Response> response = RestAssured.given().log().all()
-                            .body(params)
-                            .contentType(MediaType.APPLICATION_JSON_VALUE)
-                            .when()
-                            .post("/stations")
-                            .then().log().all()
-                            .extract();
+                    ExtractableResponse<Response> response = 역_생성(params.get("name"));
                     context.store.put(params.get("name")
                             , (new ObjectMapper()).convertValue(response.jsonPath().get(), StationResponse.class));
                 });
@@ -48,13 +41,7 @@ public class StationStepDef implements En {
     public void 지하철역_생성() {
         Map<String, String> params = new HashMap<>();
         params.put("name", "강남역");
-        response = given().log().all()
-                .body(params)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when()
-                .post("/stations")
-                .then().log().all()
-                .extract();
+        response = 역_생성(params.get("name"));
     }
 
     @Then("지하철역이 생성된다")
@@ -64,11 +51,8 @@ public class StationStepDef implements En {
 
     @Then("지하철역 목록 조회 시 생성한 역을 찾을 수 있다")
     public void 지하철역_목록_조회() {
-        List<String> stationNames =
-                given().log().all()
-                        .when().get("/stations")
-                        .then().log().all()
-                        .extract().jsonPath().getList("name", String.class);
+        List<String> stationNames = 역_목록_조회().jsonPath().getList("name", String.class);
         assertThat(stationNames).containsAnyOf("강남역");
     }
+
 }

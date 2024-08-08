@@ -3,6 +3,7 @@ package nextstep.subway.utils;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.subway.path.application.dto.PathRequest;
 import org.assertj.core.api.AbstractIntegerAssert;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
+import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public final class AcceptanceTestUtil {
@@ -36,7 +38,7 @@ public final class AcceptanceTestUtil {
         return RestAssured.given().log().all()
                 .body(newSection)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/lines/" + lineId + "/sections")
+                .when().post("/lines/{lineId}/sections" , lineId)
                 .then().log().all()
                 .extract();
     }
@@ -68,6 +70,13 @@ public final class AcceptanceTestUtil {
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/stations")
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 역_목록_조회() {
+        return given().log().all()
+                .when().get("/stations")
                 .then().log().all()
                 .extract();
     }
@@ -124,6 +133,16 @@ public final class AcceptanceTestUtil {
 
     public static AbstractIntegerAssert<?> 잘못된_요청(ExtractableResponse<Response> response) {
         return assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    public static ExtractableResponse<Response> 노선_경로_조회(PathRequest pathRequest) {
+        return RestAssured.given().log().all()
+                .queryParam("source", pathRequest.getSource())
+                .queryParam("target", pathRequest.getTarget())
+                .queryParam("type", pathRequest.getType().toString())
+                .when().get("/paths")
+                .then().log().all()
+                .extract();
     }
 
     private AcceptanceTestUtil() {
