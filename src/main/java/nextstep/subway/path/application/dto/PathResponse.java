@@ -15,17 +15,19 @@ public class PathResponse {
     private List<StationResponse> stations = new ArrayList<>();
     private Long distance;
     private Long duration;
+    private Long fare;
 
-    private PathResponse(List<StationResponse> stations, Long distance, Long duration) {
+    private PathResponse(List<StationResponse> stations, Long distance, Long duration, Long fare) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
+        this.fare = fare;
     }
 
-    public static PathResponse of(List<Station> stations, Long distance, Long duration) {
+    public static PathResponse of(List<Station> stations, Long distance, Long duration, Long fare) {
         List<StationResponse> collect = stations.stream()
                 .map(StationResponse::from)
                 .collect(Collectors.toList());
-        return new PathResponse(collect, distance, duration);
+        return new PathResponse(collect, distance, duration, fare);
     }
 }
