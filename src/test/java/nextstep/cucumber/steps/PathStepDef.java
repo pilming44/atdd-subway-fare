@@ -54,4 +54,10 @@ public class PathStepDef implements En {
         long duration = context.response.jsonPath().getLong("duration");
         assertThat(duration).isEqualTo(expectedDuration);
     }
+
+    @Then("이용 요금 {long} 응답한다")
+    public void 이용_요금_응답(long expectedFare) {
+        long fare = context.response.jsonPath().getLong("fare");
+        assertThat(fare).isEqualTo(expectedFare);
+    }
 }

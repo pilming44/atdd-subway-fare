@@ -28,10 +28,24 @@ public class DijkstraShortestPathFinder implements PathFinder {
 
         List<Station> shortestPath = path.getVertexList();
 
-        long distance = path.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDistance).sum();
-        long duration = path.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDuration).sum();
+        long distance = getDistance(path);
+        long duration = getDuration(path);
+        long fare = calculateFare(distance);
 
-        return PathResponse.of(shortestPath, distance, duration);
+        return PathResponse.of(shortestPath, distance, duration, fare);
+    }
+
+    private Long calculateFare(Long distance) {
+        FareCalculator fareCalculator = new FareCalculator();
+        return fareCalculator.getFare(distance);
+    }
+
+    private Long getDuration(GraphPath<Station, CustomWeightedEdge> path) {
+        return path.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDuration).sum();
+    }
+
+    private Long getDistance(GraphPath<Station, CustomWeightedEdge> path) {
+        return path.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDistance).sum();
     }
 
     private void validateEqualStation(Station source, Station target) {

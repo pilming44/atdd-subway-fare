@@ -5,6 +5,6 @@ public enum PathSearchType {
     DURATION;
 
     public boolean isDuration() {
-        return this.equals(DURATION);
+        return this == DURATION;
     }
 }
