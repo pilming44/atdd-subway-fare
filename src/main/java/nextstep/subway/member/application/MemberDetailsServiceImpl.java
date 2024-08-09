@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import nextstep.subway.auth.application.MemberDetailsService;
 import nextstep.subway.auth.domain.MemberDetails;
 import nextstep.subway.member.domain.Member;
-import nextstep.subway.member.domain.MemberDetailsImpl;
 import org.springframework.stereotype.Service;
 
 @Service
