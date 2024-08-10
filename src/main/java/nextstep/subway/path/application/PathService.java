@@ -5,6 +5,8 @@ import nextstep.subway.exception.IllegalPathException;
 import nextstep.subway.exception.NoSuchStationException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
+import nextstep.subway.line.domain.Section;
+import nextstep.subway.line.domain.Sections;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.DijkstraShortestPathFinder;
@@ -47,6 +49,16 @@ public class PathService {
         Long totalDistance = pathFinderResult.getSections().getTotalDistance();
         Long totalDuration = pathFinderResult.getSections().getTotalDuration();
         Long fare = fareCalculator.getFare(totalDistance);
+
+        List<Section> sections = pathFinderResult.getSections().getSectionList();
+        Long maxAddedFare = 0L;
+        for (Section section : sections) {
+            if (section.getLine().getAddedFare() > maxAddedFare) {
+                maxAddedFare = section.getLine().getAddedFare();
+            }
+        }
+
+        fare += maxAddedFare;
 
         return new PathResponse(stations, totalDistance, totalDuration, fare);
     }

@@ -19,7 +19,6 @@ public class PathFinderResult {
         this.sections = sections;
     }
 
-
     public static PathFinderResult of(List<Station> stations, List<Section> sections) {
         List<StationResponse> collect = stations.stream()
                 .map(StationResponse::from)
