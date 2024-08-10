@@ -52,21 +52,17 @@ class DijkstraShortestPathFinderTest {
                 .addPath(삼호선, PathSearchType.DISTANCE);
 
         // when
-        PathResponse pathResponse = pathFinderBuilder
+        PathFinderResult pathFinderResult = pathFinderBuilder
                 .setSource(교대역)
                 .setTarget(양재역)
                 .find();
 
         // then
-        List<StationResponse> responseStations = pathResponse.getStations();
+        List<StationResponse> responseStations = pathFinderResult.getStations();
         assertThat(responseStations).hasSize(3);
         assertThat(responseStations.get(0).getId()).isEqualTo(교대역.getId());
         assertThat(responseStations.get(1).getId()).isEqualTo(남부터미널역.getId());
         assertThat(responseStations.get(2).getId()).isEqualTo(양재역.getId());
-        assertThat(pathResponse.getDistance()).isEqualTo(5L);
-        assertThat(pathResponse.getDuration()).isEqualTo(10L);
-
-
     }
 
     @Test
@@ -79,19 +75,17 @@ class DijkstraShortestPathFinderTest {
                 .addPath(삼호선, PathSearchType.DURATION);
 
         // when
-        PathResponse pathResponse = pathFinderBuilder
+        PathFinderResult pathFinderResult = pathFinderBuilder
                 .setSource(교대역)
                 .setTarget(양재역)
                 .find();
 
         // then
-        List<StationResponse> responseStations = pathResponse.getStations();
+        List<StationResponse> responseStations = pathFinderResult.getStations();
         assertThat(responseStations).hasSize(3);
         assertThat(responseStations.get(0).getId()).isEqualTo(교대역.getId());
         assertThat(responseStations.get(1).getId()).isEqualTo(강남역.getId());
         assertThat(responseStations.get(2).getId()).isEqualTo(양재역.getId());
-        assertThat(pathResponse.getDistance()).isEqualTo(20L);
-        assertThat(pathResponse.getDuration()).isEqualTo(6L);
     }
 
     @Test

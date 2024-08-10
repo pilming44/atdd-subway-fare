@@ -68,7 +68,7 @@ public class PathFinderBuilder {
         return this;
     }
 
-    public PathResponse find() {
+    public PathFinderResult find() {
         return this.pathFinder.getPath(this.routeMap, this.source, this.target);
     }
 }

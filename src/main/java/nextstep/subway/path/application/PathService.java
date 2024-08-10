@@ -10,6 +10,8 @@ import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.domain.DijkstraShortestPathFinder;
 import nextstep.subway.path.domain.FareCalculator;
 import nextstep.subway.path.domain.PathFinderBuilder;
+import nextstep.subway.path.domain.PathFinderResult;
+import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
 import org.springframework.stereotype.Service;
@@ -35,15 +37,18 @@ public class PathService {
 
         List<Line> allLines = lineRepository.findAll();
 
-        PathResponse pathResponse = DijkstraShortestPathFinder.searchBuilder()
+        PathFinderResult pathFinderResult = DijkstraShortestPathFinder.searchBuilder()
                 .addAllPath(allLines, pathRequest.getType())
                 .setSource(sourceStation)
                 .setTarget(targetStation)
                 .find();
 
-        pathResponse.setFare(fareCalculator.getFare(pathResponse.getDistance()));
+        List<StationResponse> stations = pathFinderResult.getStations();
+        Long totalDistance = pathFinderResult.getSections().getTotalDistance();
+        Long totalDuration = pathFinderResult.getSections().getTotalDuration();
+        Long fare = fareCalculator.getFare(totalDistance);
 
-        return pathResponse;
+        return new PathResponse(stations, totalDistance, totalDuration, fare);
     }
 
     private Station getStation(Long stationId) {
