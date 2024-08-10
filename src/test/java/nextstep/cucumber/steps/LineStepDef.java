@@ -33,6 +33,7 @@ public class LineStepDef implements En {
                             , downStationId
                             , Long.parseLong(it.get("distance"))
                             , Long.parseLong(it.get("duration"))
+                            , Long.parseLong(it.get("addedFare"))
                     );
 
                     ExtractableResponse<Response> response = 노선_생성_Extract(params);

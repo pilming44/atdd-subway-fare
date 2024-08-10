@@ -14,7 +14,7 @@ class SectionTest {
 
     @BeforeEach
     void setUp() {
-        신분당선 = new Line("신분당선", "#77777");
+        신분당선 = new Line("신분당선", "#77777", 0L);
     }
 
     @Test

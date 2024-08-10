@@ -52,8 +52,9 @@ public final class AcceptanceTestUtil {
             , Long upStationId
             , Long downStationId
             , Long distance
-            , Long duration) {
-        ExtractableResponse<Response> 노선_생성_응답 = 노선_생성_Extract(노선_생성_매개변수(name, color, upStationId, downStationId, distance, duration));
+            , Long duration
+            , Long addedFare) {
+        ExtractableResponse<Response> 노선_생성_응답 = 노선_생성_Extract(노선_생성_매개변수(name, color, upStationId, downStationId, distance, duration, addedFare));
         return 노선_생성_응답.jsonPath().getLong("id");
     }
 
@@ -87,7 +88,8 @@ public final class AcceptanceTestUtil {
             Long upStationId,
             Long downStationId,
             Long distance,
-            Long duration) {
+            Long duration,
+            Long addedFare) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -95,6 +97,7 @@ public final class AcceptanceTestUtil {
         params.put("downStationId", downStationId);
         params.put("distance", distance);
         params.put("duration", duration);
+        params.put("addedFare", addedFare);
         return params;
     }
 
