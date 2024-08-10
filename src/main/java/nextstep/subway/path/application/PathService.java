@@ -35,13 +35,8 @@ public class PathService {
 
         List<Line> allLines = lineRepository.findAll();
 
-        PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder();
-
-        allLines.forEach(l -> pathFinderBuilder
-                        .addPath(l, pathRequest.getType())
-                );
-
-        PathResponse pathResponse = pathFinderBuilder
+        PathResponse pathResponse = DijkstraShortestPathFinder.searchBuilder()
+                .addAllPath(allLines, pathRequest.getType())
                 .setSource(sourceStation)
                 .setTarget(targetStation)
                 .find();

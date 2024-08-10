@@ -31,6 +31,18 @@ public class PathFinderBuilder {
         return this;
     }
 
+    public PathFinderBuilder addAllPath(List<Line> lines, PathSearchType type) {
+        lines.forEach(line -> {
+            addVertex(line.getStations());
+
+            Sections sections = line.getSections();
+
+            addEdgeWeight(sections.getSectionList(), type);
+        });
+
+        return this;
+    }
+
     private PathFinderBuilder addVertex(List<Station> stations) {
         stations.forEach(this.routeMap::addVertex);
         return this;
