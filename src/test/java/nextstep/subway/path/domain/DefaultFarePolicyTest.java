@@ -1,22 +1,25 @@
 package nextstep.subway.path.domain;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DefaultFarePolicyTest {
+class DefaultFarePolicyTest extends FareContext {
 
     @DisplayName("기본요금 계산")
-    @ParameterizedTest
-    @ValueSource(longs = {0L, 9L, 10L, 11L, 12L, 50L, 100L})
-    void 기본요금_계산(Long distance) {
+    @Test
+    void 기본요금_계산() {
         //given
         DefaultFarePolicy defaultFarePolicy = new DefaultFarePolicy();
+
         // when
-        Long fare = defaultFarePolicy.apply(distance);
+        Long 교대_양재 = defaultFarePolicy.apply(교대_양재_최단거리_조회_결과);
+        Long 교대_판교 = defaultFarePolicy.apply(교대_판교_최단거리_조회_결과);
+        Long 교대_천당 = defaultFarePolicy.apply(교대_천당_최단거리_조회_결과);
         // then
-        assertThat(fare).isEqualTo(DefaultFarePolicy.DEFAULT_FARE);
+        assertThat(교대_양재).isEqualTo(DefaultFarePolicy.DEFAULT_FARE);
+        assertThat(교대_판교).isEqualTo(DefaultFarePolicy.DEFAULT_FARE);
+        assertThat(교대_천당).isEqualTo(DefaultFarePolicy.DEFAULT_FARE);
     }
 }
