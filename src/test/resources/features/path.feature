@@ -29,12 +29,12 @@ Feature: 지하철역 경로 찾기 기능
       | 판교역 |
       | 천당역 |
     And 지하철 노선들을 생성 요청하고
-      | name | color  | upStation | downStation | distance | duration |
-      | 2호선  | green  | 교대역       | 강남역         | 10       | 3        |
-      | 신분당선 | red    | 강남역       | 양재역         | 10       | 3        |
-      | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 5        |
-      | 가상선  | blue | 남부터미널역       | 서울역      | 10        | 2        |
-      | 천당선  | white | 서울역       | 천당역      | 87        | 88    |
+      | name | color  | upStation | downStation | distance | duration | addedFare |
+      | 2호선  | green  | 교대역       | 강남역         | 10       | 3        | 0         |
+      | 신분당선 | red    | 강남역       | 양재역         | 10       | 3        | 0         |
+      | 3호선  | orange | 교대역       | 남부터미널역      | 2        | 5        | 0         |
+      | 가상선  | blue | 남부터미널역       | 서울역      | 10        | 2        | 900        |
+      | 천당선  | white | 서울역       | 천당역      | 87        | 88    | 2000            |
     And 지하철 구간을 등록 요청하고
       | lineName | upStation | downStation | distance | duration |
       | 3호선      | 남부터미널역    | 양재역         | 3        | 5        |
@@ -81,4 +81,4 @@ Feature: 지하철역 경로 찾기 기능
     Then "교대역,남부터미널역,서울역,천당역" 경로가 조회된다
     And 총 거리 99 응답한다
     And 소요 시간 95 응답한다
-    And 이용 요금 2750 응답한다
+    And 이용 요금 4750 응답한다

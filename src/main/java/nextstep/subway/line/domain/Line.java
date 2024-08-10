@@ -20,6 +20,8 @@ public class Line {
 
     private String color;
 
+    private Long addedFare;
+
     @Embedded
     private Sections sections = new Sections();
 
