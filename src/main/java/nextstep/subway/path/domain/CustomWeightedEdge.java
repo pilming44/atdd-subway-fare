@@ -1,26 +1,30 @@
 package nextstep.subway.path.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import nextstep.subway.line.domain.Section;
 import nextstep.subway.path.application.dto.PathSearchType;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 @Getter
+@AllArgsConstructor
 public class CustomWeightedEdge extends DefaultWeightedEdge {
     private PathSearchType type;
-    private Long distance;
-    private Long duration;
+    private Section section;
 
-    public CustomWeightedEdge(PathSearchType type, Long distance, Long duration) {
-        this.type = type;
-        this.distance = distance;
-        this.duration = duration;
+    public Long getDuration() {
+        return this.section.getDuration();
+    }
+
+    public Long getDistance() {
+        return this.section.getDistance();
     }
 
     @Override
     protected double getWeight() {
         if (type.isDuration()) {
-            return duration.doubleValue();
+            return section.getDuration().doubleValue();
         }
-        return distance.doubleValue();
+        return section.getDistance().doubleValue();
     }
 }

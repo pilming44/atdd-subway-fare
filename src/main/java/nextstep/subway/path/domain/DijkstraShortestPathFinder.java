@@ -35,7 +35,8 @@ public class DijkstraShortestPathFinder implements PathFinder {
     }
 
     private Long getDuration(GraphPath<Station, CustomWeightedEdge> path) {
-        return path.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDuration).sum();
+        return path.getEdgeList().stream()
+                .mapToLong(CustomWeightedEdge::getDuration).sum();
     }
 
     private Long getDistance(GraphPath<Station, CustomWeightedEdge> path) {

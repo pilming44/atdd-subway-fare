@@ -49,9 +49,9 @@ public class PathFinderBuilder {
     }
 
     private PathFinderBuilder addEdgeWeight(List<Section> sections, PathSearchType type) {
-        sections.forEach(s -> {
-            CustomWeightedEdge edge = new CustomWeightedEdge(type, s.getDistance(), s.getDuration());
-            this.routeMap.addEdge(s.getUpStation(), s.getDownStation(), edge);
+        sections.forEach(section -> {
+            CustomWeightedEdge edge = new CustomWeightedEdge(type, section);
+            this.routeMap.addEdge(section.getUpStation(), section.getDownStation(), edge);
             this.routeMap.setEdgeWeight(edge, edge.getWeight());
         });
 
