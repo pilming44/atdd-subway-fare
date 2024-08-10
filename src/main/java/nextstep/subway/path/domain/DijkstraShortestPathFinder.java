@@ -30,14 +30,8 @@ public class DijkstraShortestPathFinder implements PathFinder {
 
         long distance = getDistance(path);
         long duration = getDuration(path);
-        long fare = calculateFare(distance);
 
-        return PathResponse.of(shortestPath, distance, duration, fare);
-    }
-
-    private Long calculateFare(Long distance) {
-        FareCalculator fareCalculator = new FareCalculator();
-        return fareCalculator.getFare(distance);
+        return PathResponse.of(shortestPath, distance, duration);
     }
 
     private Long getDuration(GraphPath<Station, CustomWeightedEdge> path) {

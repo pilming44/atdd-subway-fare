@@ -1,13 +1,10 @@
 package nextstep.subway.path.domain;
 
-import lombok.Getter;
-
-@Getter
-public class DefaultFarePolicy implements FarePolicy{
-    private final Long DEFAULT_FARE = 1250L;
+public class DefaultFarePolicy implements FarePolicy {
+    public static final Long DEFAULT_FARE = 1250L;
 
     @Override
-    public Long applyPolicy(Long distance) {
+    public Long apply(Long distance) {
         return DEFAULT_FARE;
     }
 }

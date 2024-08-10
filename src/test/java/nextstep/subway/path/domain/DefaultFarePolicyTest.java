@@ -15,8 +15,8 @@ class DefaultFarePolicyTest {
         //given
         DefaultFarePolicy defaultFarePolicy = new DefaultFarePolicy();
         // when
-        Long fare = defaultFarePolicy.applyPolicy(distance);
+        Long fare = defaultFarePolicy.apply(distance);
         // then
-        assertThat(fare).isEqualTo(defaultFarePolicy.getDEFAULT_FARE());
+        assertThat(fare).isEqualTo(DefaultFarePolicy.DEFAULT_FARE);
     }
 }

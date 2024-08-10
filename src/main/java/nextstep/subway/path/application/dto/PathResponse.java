@@ -17,17 +17,16 @@ public class PathResponse {
     private Long duration;
     private Long fare;
 
-    private PathResponse(List<StationResponse> stations, Long distance, Long duration, Long fare) {
+    private PathResponse(List<StationResponse> stations, Long distance, Long duration) {
         this.stations = stations;
         this.distance = distance;
         this.duration = duration;
-        this.fare = fare;
     }
 
-    public static PathResponse of(List<Station> stations, Long distance, Long duration, Long fare) {
+    public static PathResponse of(List<Station> stations, Long distance, Long duration) {
         List<StationResponse> collect = stations.stream()
                 .map(StationResponse::from)
                 .collect(Collectors.toList());
-        return new PathResponse(collect, distance, duration, fare);
+        return new PathResponse(collect, distance, duration);
     }
 }

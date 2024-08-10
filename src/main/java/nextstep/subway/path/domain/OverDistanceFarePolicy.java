@@ -4,7 +4,7 @@ public class OverDistanceFarePolicy implements FarePolicy{
     private final Long BOUNDARY = 50L;
 
     @Override
-    public Long applyPolicy(Long distance) {
+    public Long apply(Long distance) {
         if(distance <= DEFAULT_DISTANCE) {
             return 0L;
         }

@@ -14,7 +14,7 @@ public class FareCalculator {
     public Long getFare(Long distance) {
         Long fare = 0L;
         for (FarePolicy policy : policies) {
-            fare += policy.applyPolicy(distance);
+            fare += policy.apply(distance);
         }
         return fare;
     }
