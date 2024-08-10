@@ -38,7 +38,7 @@ public final class AcceptanceTestUtil {
         return RestAssured.given().log().all()
                 .body(newSection)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/lines/{lineId}/sections" , lineId)
+                .when().post("/lines/{lineId}/sections", lineId)
                 .then().log().all()
                 .extract();
     }

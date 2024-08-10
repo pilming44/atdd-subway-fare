@@ -1,7 +1,5 @@
 package nextstep.subway.path.domain;
 
-import nextstep.subway.member.domain.AgeGroup;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -6,9 +6,7 @@ import io.cucumber.java.en.Given;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.cucumber.AcceptanceContext;
-import nextstep.subway.line.application.dto.LineResponse;
 import nextstep.subway.member.application.dto.MemberResponse;
-import nextstep.subway.station.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

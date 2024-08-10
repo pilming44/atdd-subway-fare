@@ -1,6 +1,6 @@
 package nextstep.subway.path.domain;
 
-public class OverDistanceFarePolicy implements FarePolicy{
+public class OverDistanceFarePolicy implements FarePolicy {
     private final Long BOUNDARY = 50L;
 
     @Override
@@ -8,13 +8,13 @@ public class OverDistanceFarePolicy implements FarePolicy{
         PathFinderResult pathFinderResult = fareCondition.getPathFinderResult();
         Long totalDistance = pathFinderResult.getSections().getTotalDistance();
 
-        if(totalDistance <= DEFAULT_DISTANCE) {
-            return ;
+        if (totalDistance <= DEFAULT_DISTANCE) {
+            return;
         }
 
         if (totalDistance <= BOUNDARY) {
             fareCondition.addFare(calculateUnderBoundaryFare(totalDistance));
-            return ;
+            return;
         }
 
         long extraFare = calculateUnderBoundaryFare(BOUNDARY);
