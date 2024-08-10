@@ -30,12 +30,12 @@ public class FavoriteService {
 
     @Transactional
     public Long createFavorite(LoginMember loginMember, FavoriteRequest request) {
-        Member member = memberService.findMemberByEmailOrThrow(loginMember.getEmail());
+        Member member = memberService.findMemberByEmailOrThrow(loginMember.getEmail().get());
 
         Station sourceStation = stationService.findStationByIdOrThrow(request.getSource());
         Station targetStation = stationService.findStationByIdOrThrow(request.getTarget());
 
-        pathService.getPathOrThrow(new PathRequest(request.getSource(), request.getTarget()));
+        pathService.getPathOrThrow(loginMember, new PathRequest(request.getSource(), request.getTarget()));
 
         Favorite favorite = new Favorite(member, sourceStation, targetStation);
 
@@ -45,7 +45,7 @@ public class FavoriteService {
     }
 
     public List<FavoriteResponse> findFavorites(LoginMember loginMember) {
-        Member member = memberService.findMemberByEmailOrThrow(loginMember.getEmail());
+        Member member = memberService.findMemberByEmailOrThrow(loginMember.getEmail().get());
         List<Favorite> favorites = favoriteRepository.findByMember(member);
 
         return favorites.stream()
@@ -55,7 +55,7 @@ public class FavoriteService {
 
     @Transactional
     public void deleteFavorite(LoginMember loginMember, Long id) {
-        Member member = memberService.findMemberByEmailOrThrow(loginMember.getEmail());
+        Member member = memberService.findMemberByEmailOrThrow(loginMember.getEmail().get());
 
         Favorite favorite = favoriteRepository.findById(id)
                 .orElseThrow(() -> new IllegalFavoriteException("존재하지 않는 즐겨찾기입니다."));

@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.member.domain.AgeGroup;
 import nextstep.subway.path.application.dto.PathSearchType;
 import nextstep.subway.station.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FareContext {
+    /*
+
+     교대역    --- *2호선* ---   강남역
+     |                        |
+     *3호선*                   *신분당선*
+     |                        |
+     남부터미널역  --- *3호선* ---   양재
+     |                        |
+     *가상선*                   *신분당선*
+     |                        |
+     서울역  --- *가상선* ---   판교역
+     |
+     *천당선*
+     |
+     천당역
+
+     노선 별 추가요금
+     가상선 : 900원
+     천당선 : 2000원
+     */
     protected Station 교대역;
     protected Station 강남역;
     protected Station 양재역;
@@ -26,12 +47,16 @@ public class FareContext {
 
     protected List<Line> allLines = new ArrayList<>();
 
-    PathFinderResult 교대_양재_최단거리_조회_결과;
-    PathFinderResult 교대_판교_최단거리_조회_결과;
-    PathFinderResult 교대_천당_최단거리_조회_결과;
-    PathFinderResult 교대_양재_최소시간_조회_결과;
-    PathFinderResult 교대_판교_최소시간_조회_결과;
-    PathFinderResult 교대_천당_최소시간_조회_결과;
+    FareCondition 비회원_교대_양재_최단거리_조회_결과;
+    FareCondition 비회원_교대_판교_최단거리_조회_결과;
+    FareCondition 비회원_교대_천당_최단거리_조회_결과;
+    FareCondition 비회원_교대_양재_최소시간_조회_결과;
+    FareCondition 비회원_교대_판교_최소시간_조회_결과;
+    FareCondition 비회원_교대_천당_최소시간_조회_결과;
+
+    FareCondition 성인_교대_양재_최단거리_조회_결과;
+    FareCondition 어린이_교대_판교_최단거리_조회_결과;
+    FareCondition 청소년_교대_천당_최단거리_조회_결과;
 
     @BeforeEach
     void setup() {
@@ -68,20 +93,35 @@ public class FareContext {
         allLines.add(가상선);
         allLines.add(천당선);
 
-        교대_양재_최단거리_조회_결과 = 경로조회(교대역, 양재역, PathSearchType.DISTANCE);
-        교대_판교_최단거리_조회_결과 = 경로조회(교대역, 판교역, PathSearchType.DISTANCE);
-        교대_천당_최단거리_조회_결과 = 경로조회(교대역, 천당역, PathSearchType.DISTANCE);
-        교대_양재_최소시간_조회_결과 = 경로조회(교대역, 양재역, PathSearchType.DURATION);
-        교대_판교_최소시간_조회_결과 = 경로조회(교대역, 판교역, PathSearchType.DURATION);
-        교대_천당_최소시간_조회_결과 = 경로조회(교대역, 천당역, PathSearchType.DURATION);
+        비회원_교대_양재_최단거리_조회_결과 = 비회원_경로조회(교대역, 양재역, PathSearchType.DISTANCE);
+        비회원_교대_판교_최단거리_조회_결과 = 비회원_경로조회(교대역, 판교역, PathSearchType.DISTANCE);
+        비회원_교대_천당_최단거리_조회_결과 = 비회원_경로조회(교대역, 천당역, PathSearchType.DISTANCE);
+        비회원_교대_양재_최소시간_조회_결과 = 비회원_경로조회(교대역, 양재역, PathSearchType.DURATION);
+        비회원_교대_판교_최소시간_조회_결과 = 비회원_경로조회(교대역, 판교역, PathSearchType.DURATION);
+        비회원_교대_천당_최소시간_조회_결과 = 비회원_경로조회(교대역, 천당역, PathSearchType.DURATION);
 
+        성인_교대_양재_최단거리_조회_결과 = 회원_경로조회(교대역, 양재역, PathSearchType.DISTANCE, AgeGroup.ADULT);
+        어린이_교대_판교_최단거리_조회_결과 = 회원_경로조회(교대역, 판교역, PathSearchType.DISTANCE, AgeGroup.CHILD);
+        청소년_교대_천당_최단거리_조회_결과 = 회원_경로조회(교대역, 천당역, PathSearchType.DISTANCE, AgeGroup.TEENAGER);
     }
 
-    private PathFinderResult 경로조회(Station source, Station target, PathSearchType type) {
-        return DijkstraShortestPathFinder.searchBuilder()
+    private FareCondition 비회원_경로조회(Station source, Station target, PathSearchType type) {
+        PathFinderResult pathFinderResult = DijkstraShortestPathFinder.searchBuilder()
                 .addAllPath(allLines, type)
                 .setSource(source)
                 .setTarget(target)
                 .find();
+
+        return new FareCondition(pathFinderResult, AgeGroup.NON_AGED);
+    }
+
+    private FareCondition 회원_경로조회(Station source, Station target, PathSearchType type, AgeGroup ageGroup) {
+        PathFinderResult pathFinderResult = DijkstraShortestPathFinder.searchBuilder()
+                .addAllPath(allLines, type)
+                .setSource(source)
+                .setTarget(target)
+                .find();
+
+        return new FareCondition(pathFinderResult, ageGroup);
     }
 }

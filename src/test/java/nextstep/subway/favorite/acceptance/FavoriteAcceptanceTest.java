@@ -49,7 +49,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         노선에_새로운_구간_추가_Extract(구간_생성_매개변수(남부터미널역Id, 양재역Id, 3L, 5L), 삼호선Id);
 
         회원_생성_요청(EMAIL, PASSWORD, AGE);
-        인증_토큰 = 로그인_토큰_생성(EMAIL, PASSWORD, AGE);
+        인증_토큰 = 로그인_토큰_생성(EMAIL, PASSWORD);
     }
 
     /**

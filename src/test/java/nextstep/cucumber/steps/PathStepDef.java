@@ -18,23 +18,50 @@ public class PathStepDef implements En {
     @Autowired
     private AcceptanceContext context;
 
-    @When("{string}과 {string}의 최단 거리 기준으로 경로를 조회하면")
-    public void 두_역의_최단_거리_경로_조회(String source, String target) {
+    @When("비회원이 {string}과 {string}의 최단 거리 기준으로 경로를 조회하면")
+    public void 비회원_두_역의_최단_거리_경로_조회(String source, String target) {
         Long sourceId = ((StationResponse) context.store.get(source)).getId();
         Long targetId = ((StationResponse) context.store.get(target)).getId();
 
         PathRequest pathRequest = new PathRequest(sourceId, targetId, PathSearchType.DISTANCE);
 
-        context.response = 노선_경로_조회(pathRequest);
+        String accessToken = getAccessToken();
+
+        context.response = 노선_경로_조회("", pathRequest);
     }
 
-    @When("{string}과 {string}의 최소 시간 기준으로 경로를 조회하면")
-    public void 두_역의_최소_시간_경로_조회(String source, String target) {
+    @When("비회원이 {string}과 {string}의 최소 시간 기준으로 경로를 조회하면")
+    public void 비회원_두_역의_최소_시간_경로_조회(String source, String target) {
         Long sourceId = ((StationResponse) context.store.get(source)).getId();
         Long targetId = ((StationResponse) context.store.get(target)).getId();
         PathRequest pathRequest = new PathRequest(sourceId, targetId, PathSearchType.DURATION);
 
-        context.response = 노선_경로_조회(pathRequest);
+        String accessToken = getAccessToken();
+
+        context.response = 노선_경로_조회("", pathRequest);
+    }
+
+    @When("회원이 {string}과 {string}의 최단 거리 기준으로 경로를 조회하면")
+    public void 회원_두_역의_최단_거리_경로_조회(String source, String target) {
+        Long sourceId = ((StationResponse) context.store.get(source)).getId();
+        Long targetId = ((StationResponse) context.store.get(target)).getId();
+
+        PathRequest pathRequest = new PathRequest(sourceId, targetId, PathSearchType.DISTANCE);
+
+        String accessToken = getAccessToken();
+
+        context.response = 노선_경로_조회(accessToken, pathRequest);
+    }
+
+    @When("회원이 {string}과 {string}의 최소 시간 기준으로 경로를 조회하면")
+    public void 회원_두_역의_최소_시간_경로_조회(String source, String target) {
+        Long sourceId = ((StationResponse) context.store.get(source)).getId();
+        Long targetId = ((StationResponse) context.store.get(target)).getId();
+        PathRequest pathRequest = new PathRequest(sourceId, targetId, PathSearchType.DURATION);
+
+        String accessToken = getAccessToken();
+
+        context.response = 노선_경로_조회(accessToken, pathRequest);
     }
 
     @Then("{string} 경로가 조회된다")
@@ -59,5 +86,12 @@ public class PathStepDef implements En {
     public void 이용_요금_응답(long expectedFare) {
         long fare = context.response.jsonPath().getLong("fare");
         assertThat(fare).isEqualTo(expectedFare);
+    }
+
+    private String getAccessToken() {
+        if (context.store.get("accessToken") != null) {
+            return (String) context.store.get("accessToken");
+        }
+        return "";
     }
 }

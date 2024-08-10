@@ -4,21 +4,23 @@ public class OverDistanceFarePolicy implements FarePolicy{
     private final Long BOUNDARY = 50L;
 
     @Override
-    public Long apply(PathFinderResult pathFinderResult) {
+    public void apply(FareCondition fareCondition) {
+        PathFinderResult pathFinderResult = fareCondition.getPathFinderResult();
         Long totalDistance = pathFinderResult.getSections().getTotalDistance();
 
         if(totalDistance <= DEFAULT_DISTANCE) {
-            return 0L;
+            return ;
         }
 
         if (totalDistance <= BOUNDARY) {
-            return calculateUnderBoundaryFare(totalDistance);
+            fareCondition.addFare(calculateUnderBoundaryFare(totalDistance));
+            return ;
         }
 
         long extraFare = calculateUnderBoundaryFare(BOUNDARY);
         extraFare += calculateOverBoundaryFare(totalDistance);
 
-        return extraFare;
+        fareCondition.addFare(extraFare);
     }
 
     private Long calculateUnderBoundaryFare(Long distance) {

@@ -53,7 +53,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathRequest pathRequest = new PathRequest(교대역Id, 양재역Id, PathSearchType.DISTANCE);
 
         // when
-        ExtractableResponse<Response> response = 노선_경로_조회(pathRequest);
+        ExtractableResponse<Response> response = 노선_경로_조회("", pathRequest);
 
         // then
         List<StationResponse> stations = response.jsonPath().getList("stations", StationResponse.class);
@@ -82,7 +82,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathRequest pathRequest = new PathRequest(교대역Id, 양재역Id, PathSearchType.DURATION);
 
         // when
-        ExtractableResponse<Response> response = 노선_경로_조회(pathRequest);
+        ExtractableResponse<Response> response = 노선_경로_조회("", pathRequest);
 
         // then
         List<StationResponse> stations = response.jsonPath().getList("stations", StationResponse.class);

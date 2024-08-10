@@ -8,13 +8,15 @@ import java.util.stream.Collectors;
 
 public class AddedFarePolicy implements FarePolicy {
     @Override
-    public Long apply(PathFinderResult pathFinderResult) {
-        List<Line> lines = extractLineInfo(pathFinderResult);
+    public void apply(FareCondition fareCondition) {
+        List<Line> lines = extractLineInfo(fareCondition.getPathFinderResult());
 
-        return lines.stream()
+        long addedFare = lines.stream()
                 .mapToLong(Line::getAddedFare)
                 .max()
                 .orElse(0L);
+
+        fareCondition.addFare(addedFare);
     }
 
     private List<Line> extractLineInfo(PathFinderResult pathFinderResult) {

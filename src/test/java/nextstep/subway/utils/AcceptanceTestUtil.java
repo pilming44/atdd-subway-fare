@@ -138,8 +138,9 @@ public final class AcceptanceTestUtil {
         return assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
-    public static ExtractableResponse<Response> 노선_경로_조회(PathRequest pathRequest) {
+    public static ExtractableResponse<Response> 노선_경로_조회(String accessToken, PathRequest pathRequest) {
         return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
                 .queryParam("source", pathRequest.getSource())
                 .queryParam("target", pathRequest.getTarget())
                 .queryParam("type", pathRequest.getType().toString())
