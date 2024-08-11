@@ -54,18 +54,20 @@ public class PathService {
 
         FareCondition fareCondition = makeFareCondition(pathFinderResult, user);
 
+        Long totalDuration = pathFinderResult.getSections().getTotalDuration();
+
         Long fare = fareCalculator.calculate(fareCondition);
 
-        return PathResponse.of(stations, fareCondition, fare);
+        return PathResponse.of(stations, fareCondition, totalDuration, fare);
     }
 
     private FareCondition makeFareCondition(PathFinderResult pathFinderResult, User user) {
         Long totalDistance = pathFinderResult.getSections().getTotalDistance();
-        Long totalDuration = pathFinderResult.getSections().getTotalDuration();
+
         List<Line> lines = extractLineInfo(pathFinderResult);
         AgeGroup userAgeGroup = getUserAgeGroup(user);
 
-        return new FareCondition(lines, totalDistance, totalDuration, userAgeGroup);
+        return new FareCondition(lines, totalDistance, userAgeGroup);
     }
 
 

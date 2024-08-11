@@ -125,10 +125,9 @@ public class FareContext {
 
     protected FareCondition 요금_조회_조건(PathFinderResult pathFinderResult, AgeGroup ageGroup) {
         Long totalDistance = pathFinderResult.getSections().getTotalDistance();
-        Long totalDuration = pathFinderResult.getSections().getTotalDuration();
         List<Line> lines = extractLineInfo(pathFinderResult);
 
-        return new FareCondition(lines, totalDistance, totalDuration, ageGroup);
+        return new FareCondition(lines, totalDistance, ageGroup);
     }
 
     private List<Line> extractLineInfo(PathFinderResult pathFinderResult) {

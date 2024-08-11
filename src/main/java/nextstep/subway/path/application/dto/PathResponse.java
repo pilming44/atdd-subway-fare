@@ -24,9 +24,8 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(List<StationResponse> stations, FareCondition fareCondition, Long fare) {
+    public static PathResponse of(List<StationResponse> stations, FareCondition fareCondition, Long duration, Long fare) {
         Long distance = fareCondition.getDistance();
-        Long duration = fareCondition.getDuration();
         return new PathResponse(stations, distance, duration, fare);
     }
 }
