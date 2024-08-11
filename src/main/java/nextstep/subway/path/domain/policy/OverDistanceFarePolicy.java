@@ -1,7 +1,6 @@
 package nextstep.subway.path.domain.policy;
 
 import nextstep.subway.path.domain.FareCondition;
-import nextstep.subway.path.domain.PathFinderResult;
 
 public class OverDistanceFarePolicy implements FarePolicy {
     private final Long BOUNDARY = 50L;

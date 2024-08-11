@@ -65,7 +65,7 @@ public class PathService {
         List<Line> lines = extractLineInfo(pathFinderResult);
         AgeGroup userAgeGroup = getUserAgeGroup(user);
 
-        return new FareCondition(lines, totalDistance, totalDuration,userAgeGroup);
+        return new FareCondition(lines, totalDistance, totalDuration, userAgeGroup);
     }
 
 

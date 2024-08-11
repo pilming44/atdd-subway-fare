@@ -2,7 +2,6 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.exception.IllegalPathException;
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.application.dto.PathSearchType;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.station.domain.Station;
