@@ -32,16 +32,10 @@ public enum AgeGroup {
     }
 
     public boolean isChild() {
-        if (this == CHILD) {
-            return true;
-        }
-        return false;
+        return this == CHILD;
     }
 
     public boolean isTeenager() {
-        if (this == TEENAGER) {
-            return true;
-        }
-        return false;
+        return this == TEENAGER;
     }
 }
