@@ -1,17 +1,18 @@
-package nextstep.subway.path.domain;
+package nextstep.subway.path.domain.policy;
 
 import nextstep.subway.member.domain.AgeGroup;
+import nextstep.subway.path.domain.FareCondition;
 
 public class AgeGroupFarePolicy implements FarePolicy {
 
     @Override
-    public void apply(FareCondition fareCondition) {
+    public Long apply(FareCondition fareCondition, Long fare) {
         AgeGroup ageGroup = fareCondition.getAgeGroup();
 
-        Long fare = fareCondition.getFare();
-
         if (ageGroup.isChild() || ageGroup.isTeenager()) {
-            fareCondition.discountFare(ageGroup.applyDiscount(fare));
+            return ageGroup.applyDiscount(fare);
         }
+
+        return fare;
     }
 }

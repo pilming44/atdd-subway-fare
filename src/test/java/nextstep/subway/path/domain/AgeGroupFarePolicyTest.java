@@ -1,5 +1,7 @@
 package nextstep.subway.path.domain;
 
+import nextstep.subway.member.domain.AgeGroup;
+import nextstep.subway.path.domain.policy.AgeGroupFarePolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,15 +14,14 @@ class AgeGroupFarePolicyTest extends FareContext {
     void 청소년_할인() {
         //given
         AgeGroupFarePolicy ageGroupFarePolicy = new AgeGroupFarePolicy();
-        청소년_교대_천당_최단거리_조회_결과.addFare(1350L);
+
+        FareCondition 청소년_교대_천당_요금_조회_조건 = 요금_조회_조건(회원_교대_천당_최단거리_조회_결과, AgeGroup.TEENAGER);
 
         // when
-        ageGroupFarePolicy.apply(청소년_교대_천당_최단거리_조회_결과);
+        Long 청소년_교대_천당_요금 = ageGroupFarePolicy.apply(청소년_교대_천당_요금_조회_조건, 1350L);
 
         // then
-        Long 교대_천당_요금 = 청소년_교대_천당_최단거리_조회_결과.getFare();
-
-        assertThat(교대_천당_요금).isEqualTo(800L);
+        assertThat(청소년_교대_천당_요금).isEqualTo(800L);
     }
 
     @DisplayName("어린이는 운임에서 350원을 공제한 금액의 50% 할인")
@@ -28,15 +29,13 @@ class AgeGroupFarePolicyTest extends FareContext {
     void 어린이_할인() {
         //given
         AgeGroupFarePolicy ageGroupFarePolicy = new AgeGroupFarePolicy();
-        어린이_교대_판교_최단거리_조회_결과.addFare(1350L);
+        FareCondition 어린이_교대_천당_요금_조회_조건 = 요금_조회_조건(회원_교대_천당_최단거리_조회_결과, AgeGroup.CHILD);
 
         // when
-        ageGroupFarePolicy.apply(어린이_교대_판교_최단거리_조회_결과);
+        Long 어린이_교대_천당_요금 = ageGroupFarePolicy.apply(어린이_교대_천당_요금_조회_조건, 1350L);
 
         // then
-        Long 교대_판교_요금 = 어린이_교대_판교_최단거리_조회_결과.getFare();
-
-        assertThat(교대_판교_요금).isEqualTo(500L);
+        assertThat(어린이_교대_천당_요금).isEqualTo(500L);
     }
 
     @DisplayName("성인은 정상요금 부과")
@@ -44,14 +43,12 @@ class AgeGroupFarePolicyTest extends FareContext {
     void 성인_요금() {
         //given
         AgeGroupFarePolicy ageGroupFarePolicy = new AgeGroupFarePolicy();
-        성인_교대_양재_최단거리_조회_결과.addFare(1350L);
+        FareCondition 성인_교대_천당_요금_조회_조건 = 요금_조회_조건(회원_교대_천당_최단거리_조회_결과, AgeGroup.ADULT);
 
         // when
-        ageGroupFarePolicy.apply(성인_교대_양재_최단거리_조회_결과);
+        Long 성인_교대_천당_요금 = ageGroupFarePolicy.apply(성인_교대_천당_요금_조회_조건, 1350L);
 
         // then
-        Long 교대_양재_요금 = 성인_교대_양재_최단거리_조회_결과.getFare();
-
-        assertThat(교대_양재_요금).isEqualTo(1350L);
+        assertThat(성인_교대_천당_요금).isEqualTo(1350L);
     }
 }

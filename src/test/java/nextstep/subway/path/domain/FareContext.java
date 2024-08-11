@@ -1,6 +1,7 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.line.domain.Line;
+import nextstep.subway.line.domain.Section;
 import nextstep.subway.member.domain.AgeGroup;
 import nextstep.subway.path.application.dto.PathSearchType;
 import nextstep.subway.station.domain.Station;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FareContext {
     /*
@@ -47,16 +49,16 @@ public class FareContext {
 
     protected List<Line> allLines = new ArrayList<>();
 
-    FareCondition 비회원_교대_양재_최단거리_조회_결과;
-    FareCondition 비회원_교대_판교_최단거리_조회_결과;
-    FareCondition 비회원_교대_천당_최단거리_조회_결과;
-    FareCondition 비회원_교대_양재_최소시간_조회_결과;
-    FareCondition 비회원_교대_판교_최소시간_조회_결과;
-    FareCondition 비회원_교대_천당_최소시간_조회_결과;
+    PathFinderResult 비회원_교대_양재_최단거리_조회_결과;
+    PathFinderResult 비회원_교대_판교_최단거리_조회_결과;
+    PathFinderResult 비회원_교대_천당_최단거리_조회_결과;
+    PathFinderResult 비회원_교대_양재_최소시간_조회_결과;
+    PathFinderResult 비회원_교대_판교_최소시간_조회_결과;
+    PathFinderResult 비회원_교대_천당_최소시간_조회_결과;
 
-    FareCondition 성인_교대_양재_최단거리_조회_결과;
-    FareCondition 어린이_교대_판교_최단거리_조회_결과;
-    FareCondition 청소년_교대_천당_최단거리_조회_결과;
+    PathFinderResult 회원_교대_양재_최단거리_조회_결과;
+    PathFinderResult 회원_교대_판교_최단거리_조회_결과;
+    PathFinderResult 회원_교대_천당_최단거리_조회_결과;
 
     @BeforeEach
     void setup() {
@@ -100,28 +102,39 @@ public class FareContext {
         비회원_교대_판교_최소시간_조회_결과 = 비회원_경로조회(교대역, 판교역, PathSearchType.DURATION);
         비회원_교대_천당_최소시간_조회_결과 = 비회원_경로조회(교대역, 천당역, PathSearchType.DURATION);
 
-        성인_교대_양재_최단거리_조회_결과 = 회원_경로조회(교대역, 양재역, PathSearchType.DISTANCE, AgeGroup.ADULT);
-        어린이_교대_판교_최단거리_조회_결과 = 회원_경로조회(교대역, 판교역, PathSearchType.DISTANCE, AgeGroup.CHILD);
-        청소년_교대_천당_최단거리_조회_결과 = 회원_경로조회(교대역, 천당역, PathSearchType.DISTANCE, AgeGroup.TEENAGER);
+        회원_교대_양재_최단거리_조회_결과 = 회원_경로조회(교대역, 양재역, PathSearchType.DISTANCE);
+        회원_교대_판교_최단거리_조회_결과 = 회원_경로조회(교대역, 판교역, PathSearchType.DISTANCE);
+        회원_교대_천당_최단거리_조회_결과 = 회원_경로조회(교대역, 천당역, PathSearchType.DISTANCE);
     }
 
-    private FareCondition 비회원_경로조회(Station source, Station target, PathSearchType type) {
-        PathFinderResult pathFinderResult = DijkstraShortestPathFinder.searchBuilder()
+    private PathFinderResult 비회원_경로조회(Station source, Station target, PathSearchType type) {
+        return DijkstraShortestPathFinder.searchBuilder()
                 .addAllPath(allLines, type)
                 .setSource(source)
                 .setTarget(target)
                 .find();
-
-        return new FareCondition(pathFinderResult, AgeGroup.NON_AGED);
     }
 
-    private FareCondition 회원_경로조회(Station source, Station target, PathSearchType type, AgeGroup ageGroup) {
-        PathFinderResult pathFinderResult = DijkstraShortestPathFinder.searchBuilder()
+    private PathFinderResult 회원_경로조회(Station source, Station target, PathSearchType type) {
+        return DijkstraShortestPathFinder.searchBuilder()
                 .addAllPath(allLines, type)
                 .setSource(source)
                 .setTarget(target)
                 .find();
+    }
 
-        return new FareCondition(pathFinderResult, ageGroup);
+    protected FareCondition 요금_조회_조건(PathFinderResult pathFinderResult, AgeGroup ageGroup) {
+        Long totalDistance = pathFinderResult.getSections().getTotalDistance();
+        Long totalDuration = pathFinderResult.getSections().getTotalDuration();
+        List<Line> lines = extractLineInfo(pathFinderResult);
+
+        return new FareCondition(lines, totalDistance, totalDuration, ageGroup);
+    }
+
+    private List<Line> extractLineInfo(PathFinderResult pathFinderResult) {
+        return pathFinderResult.getSections().getSectionList().stream()
+                .map(Section::getLine)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

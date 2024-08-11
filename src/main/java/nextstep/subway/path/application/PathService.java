@@ -6,6 +6,7 @@ import nextstep.subway.exception.IllegalPathException;
 import nextstep.subway.exception.NoSuchStationException;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.LineRepository;
+import nextstep.subway.line.domain.Section;
 import nextstep.subway.member.application.MemberService;
 import nextstep.subway.member.domain.AgeGroup;
 import nextstep.subway.member.domain.Member;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -49,15 +51,23 @@ public class PathService {
                 .find();
 
         List<StationResponse> stations = pathFinderResult.getStations();
+
+        FareCondition fareCondition = makeFareCondition(pathFinderResult, user);
+
+        Long fare = fareCalculator.calculate(fareCondition);
+
+        return PathResponse.of(stations, fareCondition, fare);
+    }
+
+    private FareCondition makeFareCondition(PathFinderResult pathFinderResult, User user) {
         Long totalDistance = pathFinderResult.getSections().getTotalDistance();
         Long totalDuration = pathFinderResult.getSections().getTotalDuration();
-
+        List<Line> lines = extractLineInfo(pathFinderResult);
         AgeGroup userAgeGroup = getUserAgeGroup(user);
 
-        Long fare = fareCalculator.getFare(new FareCondition(pathFinderResult, userAgeGroup));
-
-        return new PathResponse(stations, totalDistance, totalDuration, fare);
+        return new FareCondition(lines, totalDistance, totalDuration,userAgeGroup);
     }
+
 
     private Station getStation(Long stationId) {
         return stationRepository.findById(stationId)
@@ -70,5 +80,12 @@ public class PathService {
             return member.getAgeGroup();
         }
         return AgeGroup.NON_AGED;
+    }
+
+    private List<Line> extractLineInfo(PathFinderResult pathFinderResult) {
+        return pathFinderResult.getSections().getSectionList().stream()
+                .map(Section::getLine)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }
