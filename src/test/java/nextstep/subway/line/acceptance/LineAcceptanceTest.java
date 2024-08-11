@@ -29,7 +29,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         신사역Id = 역_생성_후_id_추출("신사역");
         논현역Id = 역_생성_후_id_추출("논현역");
         강남역Id = 역_생성_후_id_추출("강남역");
-        신분당선_요청_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L, 5L);
+        신분당선_요청_매개변수 = 노선_생성_매개변수("신분당선", "bg-red-600", 신사역Id, 논현역Id, 10L, 5L, 0L);
 
     }
 
@@ -59,7 +59,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("존재하지 않는 상행역을 포함한 노선을 생성하면 에러가 발생한다.")
     void 존재하지_않는_상행역을_포함한_노선_생성() {
         //given
-        Map<String, Object> 분당선_요청_매개변수 = 노선_생성_매개변수("분당선", "bg-green-600", 99L, 신사역Id, 7L, 5L);
+        Map<String, Object> 분당선_요청_매개변수 = 노선_생성_매개변수("분당선", "bg-green-600", 99L, 신사역Id, 7L, 5L, 0L);
         // when
         ExtractableResponse<Response> response = 노선_생성_Extract(분당선_요청_매개변수);
 
@@ -71,7 +71,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     @DisplayName("존재하지 않는 하행역을 포함한 노선을 생성하면 에러가 발생한다.")
     void 존재하지_않는_하행역을_포함한_노선_생성() {
         //given
-        Map<String, Object> 분당선_요청_매개변수 = 노선_생성_매개변수("분당선", "bg-green-600", 신사역Id, 99L, 7L, 5L);
+        Map<String, Object> 분당선_요청_매개변수 = 노선_생성_매개변수("분당선", "bg-green-600", 신사역Id, 99L, 7L, 5L, 0L);
         // when
         ExtractableResponse<Response> response = 노선_생성_Extract(분당선_요청_매개변수);
 
@@ -85,7 +85,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         노선_생성_Extract(신분당선_요청_매개변수);
 
-        Map<String, Object> 분당선_요청_매개변수 = 노선_생성_매개변수("분당선", "bg-green-600", 신사역Id, 강남역Id, 7L, 5L);
+        Map<String, Object> 분당선_요청_매개변수 = 노선_생성_매개변수("분당선", "bg-green-600", 신사역Id, 강남역Id, 7L, 5L, 0L);
 
         노선_생성_Extract(분당선_요청_매개변수);
 

@@ -17,5 +17,6 @@ public class AuthConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List argumentResolvers) {
         argumentResolvers.add(new AuthenticationPrincipalArgumentResolver(jwtTokenProvider));
+        argumentResolvers.add(new NullableAuthenticationPrincipalArgumentResolver(jwtTokenProvider));
     }
 }

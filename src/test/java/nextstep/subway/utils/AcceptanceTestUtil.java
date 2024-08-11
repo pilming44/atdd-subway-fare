@@ -38,7 +38,7 @@ public final class AcceptanceTestUtil {
         return RestAssured.given().log().all()
                 .body(newSection)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/lines/{lineId}/sections" , lineId)
+                .when().post("/lines/{lineId}/sections", lineId)
                 .then().log().all()
                 .extract();
     }
@@ -52,8 +52,9 @@ public final class AcceptanceTestUtil {
             , Long upStationId
             , Long downStationId
             , Long distance
-            , Long duration) {
-        ExtractableResponse<Response> 노선_생성_응답 = 노선_생성_Extract(노선_생성_매개변수(name, color, upStationId, downStationId, distance, duration));
+            , Long duration
+            , Long addedFare) {
+        ExtractableResponse<Response> 노선_생성_응답 = 노선_생성_Extract(노선_생성_매개변수(name, color, upStationId, downStationId, distance, duration, addedFare));
         return 노선_생성_응답.jsonPath().getLong("id");
     }
 
@@ -87,7 +88,8 @@ public final class AcceptanceTestUtil {
             Long upStationId,
             Long downStationId,
             Long distance,
-            Long duration) {
+            Long duration,
+            Long addedFare) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -95,6 +97,7 @@ public final class AcceptanceTestUtil {
         params.put("downStationId", downStationId);
         params.put("distance", distance);
         params.put("duration", duration);
+        params.put("addedFare", addedFare);
         return params;
     }
 
@@ -135,8 +138,9 @@ public final class AcceptanceTestUtil {
         return assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
-    public static ExtractableResponse<Response> 노선_경로_조회(PathRequest pathRequest) {
+    public static ExtractableResponse<Response> 노선_경로_조회(String accessToken, PathRequest pathRequest) {
         return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
                 .queryParam("source", pathRequest.getSource())
                 .queryParam("target", pathRequest.getTarget())
                 .queryParam("type", pathRequest.getType().toString())

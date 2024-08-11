@@ -66,17 +66,16 @@ public class MemberSteps {
         assertThat(response.jsonPath().getInt("age")).isEqualTo(age);
     }
 
-    public static String 로그인_토큰_생성(String email, String password, int age) {
-        Map<String, String> 로그인_매개변수 = 로그인_매개변수(email, password, String.valueOf(age));
+    public static String 로그인_토큰_생성(String email, String password) {
+        Map<String, String> 로그인_매개변수 = 로그인_매개변수(email, password);
         ExtractableResponse<Response> response = 로그인_토큰_생성_응답(로그인_매개변수);
         return response.jsonPath().getString("accessToken");
     }
 
-    public static Map<String, String> 로그인_매개변수(String email, String password, String age) {
+    public static Map<String, String> 로그인_매개변수(String email, String password) {
         Map<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);
-        params.put("age", age + "");
         return params;
     }
 

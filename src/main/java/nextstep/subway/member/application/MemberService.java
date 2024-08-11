@@ -46,7 +46,7 @@ public class MemberService {
     }
 
     public MemberResponse findMe(LoginMember loginMember) {
-        return memberRepository.findByEmail(loginMember.getEmail())
+        return memberRepository.findByEmail(loginMember.getEmail().get())
                 .map(it -> MemberResponse.of(it))
                 .orElseThrow(() -> new NoSuchMemberException());
     }

@@ -2,7 +2,6 @@ package nextstep.subway.path.domain;
 
 import nextstep.subway.exception.IllegalPathException;
 import nextstep.subway.line.domain.Line;
-import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.application.dto.PathSearchType;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.station.domain.Station;
@@ -31,13 +30,13 @@ class DijkstraShortestPathFinderTest {
         양재역 = new Station("양재역");
         남부터미널역 = new Station("남부터미널역");
 
-        이호선 = new Line("2호선", "bg-green-600");
+        이호선 = new Line("2호선", "bg-green-600", 0L);
         이호선.addSection(교대역, 강남역, 10L, 3L);
 
-        신분당선 = new Line("신분당선", "bg-blue-600");
+        신분당선 = new Line("신분당선", "bg-blue-600", 0L);
         신분당선.addSection(강남역, 양재역, 10L, 3L);
 
-        삼호선 = new Line("3호선", "bg-red-600");
+        삼호선 = new Line("3호선", "bg-red-600", 0L);
         삼호선.addSection(교대역, 남부터미널역, 2L, 5L);
         삼호선.addSection(남부터미널역, 양재역, 3L, 5L);
     }
@@ -52,21 +51,17 @@ class DijkstraShortestPathFinderTest {
                 .addPath(삼호선, PathSearchType.DISTANCE);
 
         // when
-        PathResponse pathResponse = pathFinderBuilder
+        PathFinderResult pathFinderResult = pathFinderBuilder
                 .setSource(교대역)
                 .setTarget(양재역)
                 .find();
 
         // then
-        List<StationResponse> responseStations = pathResponse.getStations();
+        List<StationResponse> responseStations = pathFinderResult.getStations();
         assertThat(responseStations).hasSize(3);
         assertThat(responseStations.get(0).getId()).isEqualTo(교대역.getId());
         assertThat(responseStations.get(1).getId()).isEqualTo(남부터미널역.getId());
         assertThat(responseStations.get(2).getId()).isEqualTo(양재역.getId());
-        assertThat(pathResponse.getDistance()).isEqualTo(5L);
-        assertThat(pathResponse.getDuration()).isEqualTo(10L);
-
-
     }
 
     @Test
@@ -79,19 +74,17 @@ class DijkstraShortestPathFinderTest {
                 .addPath(삼호선, PathSearchType.DURATION);
 
         // when
-        PathResponse pathResponse = pathFinderBuilder
+        PathFinderResult pathFinderResult = pathFinderBuilder
                 .setSource(교대역)
                 .setTarget(양재역)
                 .find();
 
         // then
-        List<StationResponse> responseStations = pathResponse.getStations();
+        List<StationResponse> responseStations = pathFinderResult.getStations();
         assertThat(responseStations).hasSize(3);
         assertThat(responseStations.get(0).getId()).isEqualTo(교대역.getId());
         assertThat(responseStations.get(1).getId()).isEqualTo(강남역.getId());
         assertThat(responseStations.get(2).getId()).isEqualTo(양재역.getId());
-        assertThat(pathResponse.getDistance()).isEqualTo(20L);
-        assertThat(pathResponse.getDuration()).isEqualTo(6L);
     }
 
     @Test
@@ -112,10 +105,10 @@ class DijkstraShortestPathFinderTest {
     @DisplayName("경로조회 시 출발역과 도착역이 연결이 되어 있지 않은 경우 예외 발생")
     void 출발역과_도착역이_연결_안됨_예외_발생() {
         // given
-        Line 이호선 = new Line("2호선", "bg-green-600");
+        Line 이호선 = new Line("2호선", "bg-green-600", 0L);
         이호선.addSection(교대역, 남부터미널역, 10L, 3L);
 
-        Line 신분당선 = new Line("신분당선", "bg-blue-600");
+        Line 신분당선 = new Line("신분당선", "bg-blue-600", 0L);
         신분당선.addSection(강남역, 양재역, 10L, 3L);
 
         PathFinderBuilder pathFinderBuilder = DijkstraShortestPathFinder.searchBuilder()

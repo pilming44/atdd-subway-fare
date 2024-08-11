@@ -20,6 +20,8 @@ public class Line {
 
     private String color;
 
+    private Long addedFare;
+
     @Embedded
     private Sections sections = new Sections();
 
@@ -29,9 +31,10 @@ public class Line {
         this.color = color;
     }
 
-    public Line(String name, String color) {
+    public Line(String name, String color, Long addedFare) {
         this.name = name;
         this.color = color;
+        this.addedFare = addedFare;
     }
 
     public List<Station> getStations() {

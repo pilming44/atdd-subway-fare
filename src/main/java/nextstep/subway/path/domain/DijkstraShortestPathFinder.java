@@ -1,13 +1,14 @@
 package nextstep.subway.path.domain;
 
 import nextstep.subway.exception.IllegalPathException;
-import nextstep.subway.path.application.dto.PathResponse;
+import nextstep.subway.line.domain.Section;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DijkstraShortestPathFinder implements PathFinder {
     public static PathFinderBuilder searchBuilder() {
@@ -15,7 +16,7 @@ public class DijkstraShortestPathFinder implements PathFinder {
     }
 
     @Override
-    public PathResponse getPath(WeightedMultigraph<Station, CustomWeightedEdge> routeMap
+    public PathFinderResult getPath(WeightedMultigraph<Station, CustomWeightedEdge> routeMap
             , Station source
             , Station target) {
         validateEqualStation(source, target);
@@ -26,26 +27,13 @@ public class DijkstraShortestPathFinder implements PathFinder {
 
         validateLinkedPath(path);
 
-        List<Station> shortestPath = path.getVertexList();
+        List<Station> shortestPathStation = path.getVertexList();
 
-        long distance = getDistance(path);
-        long duration = getDuration(path);
-        long fare = calculateFare(distance);
+        List<Section> sections = path.getEdgeList().stream()
+                .map(CustomWeightedEdge::getSection)
+                .collect(Collectors.toList());
 
-        return PathResponse.of(shortestPath, distance, duration, fare);
-    }
-
-    private Long calculateFare(Long distance) {
-        FareCalculator fareCalculator = new FareCalculator();
-        return fareCalculator.getFare(distance);
-    }
-
-    private Long getDuration(GraphPath<Station, CustomWeightedEdge> path) {
-        return path.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDuration).sum();
-    }
-
-    private Long getDistance(GraphPath<Station, CustomWeightedEdge> path) {
-        return path.getEdgeList().stream().mapToLong(CustomWeightedEdge::getDistance).sum();
+        return PathFinderResult.of(shortestPathStation, sections);
     }
 
     private void validateEqualStation(Station source, Station target) {

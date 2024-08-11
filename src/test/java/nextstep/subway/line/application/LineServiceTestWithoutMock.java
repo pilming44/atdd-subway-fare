@@ -38,7 +38,7 @@ public class LineServiceTestWithoutMock {
         신사역 = stationRepository.save(new Station("신사역"));
         강남역 = stationRepository.save(new Station("강남역"));
         판교역 = stationRepository.save(new Station("판교역"));
-        신분당선 = lineRepository.save(new Line("신분당선", "#77777"));
+        신분당선 = lineRepository.save(new Line("신분당선", "#77777", 0L));
     }
 
     @Test

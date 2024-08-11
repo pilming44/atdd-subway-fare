@@ -79,7 +79,7 @@ class MemberAcceptanceTest extends AcceptanceTest {
     void getMyInfo() {
         // given
         회원_생성_요청(EMAIL, PASSWORD, AGE);
-        String 로그인_토큰 = 로그인_토큰_생성(EMAIL, PASSWORD, AGE);
+        String 로그인_토큰 = 로그인_토큰_생성(EMAIL, PASSWORD);
 
         ExtractableResponse<Response> 내_정보_조회_응답 = 내_정보_조회(로그인_토큰);
 

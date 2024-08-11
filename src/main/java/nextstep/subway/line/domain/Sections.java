@@ -1,5 +1,7 @@
 package nextstep.subway.line.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import nextstep.subway.exception.IllegalSectionException;
 import nextstep.subway.station.domain.Station;
 
@@ -13,6 +15,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
 public class Sections {
     private final int FIRST_OR_END_SECTION_INDEX = 0;
     private final int FRONT_SECTION_INDEX = 0;
@@ -27,6 +31,18 @@ public class Sections {
 
     public int getSectionListSize() {
         return sectionList.size();
+    }
+
+    public Long getTotalDistance() {
+        return sectionList.stream()
+                .mapToLong(Section::getDistance)
+                .sum();
+    }
+
+    public Long getTotalDuration() {
+        return sectionList.stream()
+                .mapToLong(Section::getDuration)
+                .sum();
     }
 
     public List<Station> getStations() {

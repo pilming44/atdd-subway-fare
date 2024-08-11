@@ -3,7 +3,6 @@ package nextstep.subway.path.domain;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.line.domain.Sections;
-import nextstep.subway.path.application.dto.PathResponse;
 import nextstep.subway.path.application.dto.PathSearchType;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -31,15 +30,27 @@ public class PathFinderBuilder {
         return this;
     }
 
+    public PathFinderBuilder addAllPath(List<Line> lines, PathSearchType type) {
+        lines.forEach(line -> {
+            addVertex(line.getStations());
+
+            Sections sections = line.getSections();
+
+            addEdgeWeight(sections.getSectionList(), type);
+        });
+
+        return this;
+    }
+
     private PathFinderBuilder addVertex(List<Station> stations) {
         stations.forEach(this.routeMap::addVertex);
         return this;
     }
 
     private PathFinderBuilder addEdgeWeight(List<Section> sections, PathSearchType type) {
-        sections.forEach(s -> {
-            CustomWeightedEdge edge = new CustomWeightedEdge(type, s.getDistance(), s.getDuration());
-            this.routeMap.addEdge(s.getUpStation(), s.getDownStation(), edge);
+        sections.forEach(section -> {
+            CustomWeightedEdge edge = new CustomWeightedEdge(type, section);
+            this.routeMap.addEdge(section.getUpStation(), section.getDownStation(), edge);
             this.routeMap.setEdgeWeight(edge, edge.getWeight());
         });
 
@@ -56,7 +67,7 @@ public class PathFinderBuilder {
         return this;
     }
 
-    public PathResponse find() {
+    public PathFinderResult find() {
         return this.pathFinder.getPath(this.routeMap, this.source, this.target);
     }
 }
