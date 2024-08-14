@@ -3,7 +3,7 @@ package nextstep.subway.path.acceptance;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.subway.path.application.dto.PathRequest;
-import nextstep.subway.path.application.dto.PathSearchType;
+import nextstep.subway.path.domain.PathSearchType;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;

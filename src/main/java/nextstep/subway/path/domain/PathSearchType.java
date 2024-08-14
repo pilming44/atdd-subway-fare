@@ -1,4 +1,4 @@
-package nextstep.subway.path.application.dto;
+package nextstep.subway.path.domain;
 
 public enum PathSearchType {
     DISTANCE,

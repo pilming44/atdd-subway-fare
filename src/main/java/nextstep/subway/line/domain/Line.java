@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import nextstep.subway.station.domain.Station;
 
 import javax.persistence.*;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -21,6 +23,12 @@ public class Line {
     private String color;
 
     private Long addedFare;
+
+    private LocalTime startTime;
+
+    private LocalTime endTime;
+
+    private Duration intervalTime;
 
     @Embedded
     private Sections sections = new Sections();

@@ -3,7 +3,6 @@ package nextstep.subway.path.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import nextstep.subway.line.domain.Section;
-import nextstep.subway.path.application.dto.PathSearchType;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 @Getter

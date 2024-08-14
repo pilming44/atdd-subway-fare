@@ -5,7 +5,7 @@ import io.cucumber.java.en.When;
 import io.cucumber.java8.En;
 import nextstep.cucumber.AcceptanceContext;
 import nextstep.subway.path.application.dto.PathRequest;
-import nextstep.subway.path.application.dto.PathSearchType;
+import nextstep.subway.path.domain.PathSearchType;
 import nextstep.subway.station.application.dto.StationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 

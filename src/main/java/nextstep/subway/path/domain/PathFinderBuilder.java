@@ -3,7 +3,6 @@ package nextstep.subway.path.domain;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.line.domain.Sections;
-import nextstep.subway.path.application.dto.PathSearchType;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.graph.WeightedMultigraph;
 
