@@ -45,6 +45,15 @@ public class Line {
         this.addedFare = addedFare;
     }
 
+    public Line(String name, String color, Long addedFare, LocalTime startTime, LocalTime endTime, Duration intervalTime) {
+        this.name = name;
+        this.color = color;
+        this.addedFare = addedFare;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.intervalTime = intervalTime;
+    }
+
     public List<Station> getStations() {
         return sections.getStations();
     }

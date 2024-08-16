@@ -8,6 +8,8 @@ import org.assertj.core.api.AbstractIntegerAssert;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,8 +55,13 @@ public final class AcceptanceTestUtil {
             , Long downStationId
             , Long distance
             , Long duration
-            , Long addedFare) {
-        ExtractableResponse<Response> 노선_생성_응답 = 노선_생성_Extract(노선_생성_매개변수(name, color, upStationId, downStationId, distance, duration, addedFare));
+            , Long addedFare
+            , String startTime
+            , String endTime
+            , int intervalTime) {
+        ExtractableResponse<Response> 노선_생성_응답 = 노선_생성_Extract(
+                노선_생성_매개변수(name, color, upStationId, downStationId, distance, duration, addedFare, startTime, endTime, intervalTime)
+        );
         return 노선_생성_응답.jsonPath().getLong("id");
     }
 
@@ -89,7 +96,10 @@ public final class AcceptanceTestUtil {
             Long downStationId,
             Long distance,
             Long duration,
-            Long addedFare) {
+            Long addedFare,
+            String startTime,
+            String endTime,
+            int intervalTime) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -98,6 +108,9 @@ public final class AcceptanceTestUtil {
         params.put("distance", distance);
         params.put("duration", duration);
         params.put("addedFare", addedFare);
+        params.put("startTime", startTime);
+        params.put("endTime", endTime);
+        params.put("intervalTime", intervalTime);
         return params;
     }
 

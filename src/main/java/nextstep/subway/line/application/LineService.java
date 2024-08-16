@@ -12,6 +12,7 @@ import nextstep.subway.station.domain.StationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +35,12 @@ public class LineService {
         if (lineRequest.getDownStationId() != null) {
             downStation = getStation(lineRequest.getDownStationId());
         }
-        Line line = lineRepository.save(new Line(lineRequest.getName(), lineRequest.getColor(), lineRequest.getAddedFare()));
+        Line line = lineRepository.save(new Line(lineRequest.getName()
+                , lineRequest.getColor()
+                , lineRequest.getAddedFare()
+                , lineRequest.getStartTime()
+                , lineRequest.getEndTime()
+                , Duration.ofMinutes(lineRequest.getIntervalTime())));
         line.addSection(upStation, downStation, lineRequest.getDistance(), lineRequest.getDuration());
 
         return LineResponse.from(line);

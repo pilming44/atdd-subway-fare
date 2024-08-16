@@ -34,6 +34,9 @@ public class LineStepDef implements En {
                             , Long.parseLong(it.get("distance"))
                             , Long.parseLong(it.get("duration"))
                             , Long.parseLong(it.get("addedFare"))
+                            , it.get("startTime")
+                            , it.get("endTime")
+                            , Integer.parseInt(it.get("intervalTime"))
                     );
 
                     ExtractableResponse<Response> response = 노선_생성_Extract(params);

@@ -45,9 +45,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("출발역과 도착역의 최단경로를 조회한다.")
     void 최단_경로_조회() {
         //given
-        노선_생성_Extract(노선_생성_매개변수("2호선", "bg-green-600", 교대역Id, 강남역Id, 10L, 3L, 0L));
-        노선_생성_Extract(노선_생성_매개변수("신분당선", "bg-gre-600", 강남역Id, 양재역Id, 10L, 3L, 0L));
-        long 삼호선Id = 노선_생성_후_id_추출("3호선", "bg-green-600", 교대역Id, 남부터미널역Id, 2L, 5L, 0L);
+        노선_생성_Extract(노선_생성_매개변수("2호선", "bg-green-600", 교대역Id, 강남역Id, 10L, 3L,
+                0L, "05:00", "23:00", 10));
+        노선_생성_Extract(노선_생성_매개변수("신분당선", "bg-gre-600", 강남역Id, 양재역Id, 10L, 3L,
+                0L, "05:30", "23:00", 15));
+        long 삼호선Id = 노선_생성_후_id_추출("3호선", "bg-green-600", 교대역Id, 남부터미널역Id, 2L, 5L,
+                0L, "06:00", "23:00", 5);
         노선에_새로운_구간_추가_Extract(구간_생성_매개변수(남부터미널역Id, 양재역Id, 3L, 5L), 삼호선Id);
 
         PathRequest pathRequest = new PathRequest(교대역Id, 양재역Id, PathSearchType.DISTANCE);
@@ -74,9 +77,12 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @DisplayName("출발역과 도착역의 최소 소요시간 경로를 조회한다.")
     void 최소_소요시간_경로_조회() {
         //given
-        노선_생성_Extract(노선_생성_매개변수("2호선", "bg-green-600", 교대역Id, 강남역Id, 10L, 3L, 0L));
-        노선_생성_Extract(노선_생성_매개변수("신분당선", "bg-gre-600", 강남역Id, 양재역Id, 10L, 3L, 0L));
-        long 삼호선Id = 노선_생성_후_id_추출("3호선", "bg-green-600", 교대역Id, 남부터미널역Id, 2L, 5L, 0L);
+        노선_생성_Extract(노선_생성_매개변수("2호선", "bg-green-600", 교대역Id, 강남역Id, 10L, 3L,
+                0L, "05:00", "23:00", 10));
+        노선_생성_Extract(노선_생성_매개변수("신분당선", "bg-gre-600", 강남역Id, 양재역Id, 10L, 3L,
+                0L, "05:30", "23:00", 15));
+        long 삼호선Id = 노선_생성_후_id_추출("3호선", "bg-green-600", 교대역Id, 남부터미널역Id, 2L, 5L,
+                0L, "06:00", "23:00", 5);
         노선에_새로운_구간_추가_Extract(구간_생성_매개변수(남부터미널역Id, 양재역Id, 3L, 5L), 삼호선Id);
 
         PathRequest pathRequest = new PathRequest(교대역Id, 양재역Id, PathSearchType.DURATION);

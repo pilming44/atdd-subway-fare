@@ -6,6 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static nextstep.subway.utils.EntityTestFixture.*;
@@ -18,7 +21,9 @@ class LineTest {
 
     @BeforeEach
     void setUp() {
-        신분당선 = new Line("신분당선", "#77777", 0L);
+        신분당선 = new Line("신분당선", "#77777", 0L, LocalTime.parse("05:30", DateTimeFormatter.ofPattern("HH:mm"))
+                , LocalTime.parse("23:00", DateTimeFormatter.ofPattern("HH:mm"))
+                , Duration.ofMinutes(15));
     }
 
     @Test

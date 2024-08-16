@@ -14,6 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -38,7 +42,13 @@ public class LineServiceTestWithoutMock {
         신사역 = stationRepository.save(new Station("신사역"));
         강남역 = stationRepository.save(new Station("강남역"));
         판교역 = stationRepository.save(new Station("판교역"));
-        신분당선 = lineRepository.save(new Line("신분당선", "#77777", 0L));
+
+        신분당선 = lineRepository.save(
+                new Line("신분당선", "#77777", 0L
+                        , LocalTime.parse("05:30", DateTimeFormatter.ofPattern("HH:mm"))
+                        , LocalTime.parse("23:00", DateTimeFormatter.ofPattern("HH:mm"))
+                        , Duration.ofMinutes(15)
+        ));
     }
 
     @Test
