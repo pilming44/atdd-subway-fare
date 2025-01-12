@@ -11,13 +11,16 @@ import nextstep.subway.path.domain.PathSearchType;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PathRequest {
+    private String time;
     private Long source;
     private Long target;
     private PathSearchType type;
 
     public PathRequest(Long source, Long target) {
-        this(source, target, PathSearchType.DURATION);
+        this(null, source, target, PathSearchType.DURATION);
     }
 
-
+    public PathRequest(Long source, Long target, PathSearchType type) {
+        this(null, source, target, type);
+    }
 }

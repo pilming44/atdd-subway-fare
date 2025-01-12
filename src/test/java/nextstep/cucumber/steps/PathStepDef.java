@@ -64,6 +64,17 @@ public class PathStepDef implements En {
         context.response = 노선_경로_조회(accessToken, pathRequest);
     }
 
+    @When("회원이 {string}에 {string}과 {string}의 가장 빠른 도착 경로를 조회하면")
+    public void 회원_두_역의_가장_빠른_도착_경로_조회(String time, String source, String target) {
+        Long sourceId = ((StationResponse) context.store.get(source)).getId();
+        Long targetId = ((StationResponse) context.store.get(target)).getId();
+        PathRequest pathRequest = new PathRequest(time, sourceId, targetId, PathSearchType.ARRIVAL_TIME);
+
+        String accessToken = getAccessToken();
+
+        context.response = 노선_경로_조회(accessToken, pathRequest);
+    }
+
     @Then("{string} 경로가 조회된다")
     public void 콤마로_구분된_경로_조회(String pathString) {
         List<String> split = List.of(pathString.split(","));

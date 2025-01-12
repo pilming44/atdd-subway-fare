@@ -157,6 +157,7 @@ public final class AcceptanceTestUtil {
                 .queryParam("source", pathRequest.getSource())
                 .queryParam("target", pathRequest.getTarget())
                 .queryParam("type", pathRequest.getType().toString())
+                .queryParam("time", pathRequest.getTime())
                 .when().get("/paths")
                 .then().log().all()
                 .extract();
