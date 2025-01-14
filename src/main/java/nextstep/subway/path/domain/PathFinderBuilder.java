@@ -3,6 +3,9 @@ package nextstep.subway.path.domain;
 import nextstep.subway.line.domain.Line;
 import nextstep.subway.line.domain.Section;
 import nextstep.subway.line.domain.Sections;
+import nextstep.subway.path.domain.strategy.DistancePathStrategy;
+import nextstep.subway.path.domain.strategy.DurationPathStrategy;
+import nextstep.subway.path.domain.strategy.PathWeightStrategy;
 import nextstep.subway.station.domain.Station;
 import org.jgrapht.graph.WeightedMultigraph;
 
@@ -19,41 +22,51 @@ public class PathFinderBuilder {
         this.routeMap = new WeightedMultigraph<>(CustomWeightedEdge.class);
     }
 
+    private PathWeightStrategy createStrategy(PathSearchType type) {
+        if (type == PathSearchType.DISTANCE) {
+            return new DistancePathStrategy();
+        } else if (type == PathSearchType.DURATION) {
+            return new DurationPathStrategy();
+        }
+
+        throw new UnsupportedOperationException("지원하지 않는 PathSearchType입니다.");
+    }
+
     public PathFinderBuilder addPath(Line line, PathSearchType type) {
+        PathWeightStrategy strategy = createStrategy(type);
+
         addVertex(line.getStations());
 
         Sections sections = line.getSections();
 
-        addEdgeWeight(sections.getSectionList(), type);
-
+        addEdgeWeight(sections.getSectionList(), strategy);
         return this;
     }
 
     public PathFinderBuilder addAllPath(List<Line> lines, PathSearchType type) {
+        PathWeightStrategy strategy = createStrategy(type);
+
         lines.forEach(line -> {
             addVertex(line.getStations());
 
             Sections sections = line.getSections();
 
-            addEdgeWeight(sections.getSectionList(), type);
+            addEdgeWeight(sections.getSectionList(), strategy);
         });
 
         return this;
     }
 
-    private PathFinderBuilder addVertex(List<Station> stations) {
+    private void addVertex(List<Station> stations) {
         stations.forEach(this.routeMap::addVertex);
-        return this;
     }
 
-    private PathFinderBuilder addEdgeWeight(List<Section> sections, PathSearchType type) {
+    private void addEdgeWeight(List<Section> sections, PathWeightStrategy strategy) {
         sections.forEach(section -> {
-            CustomWeightedEdge edge = new CustomWeightedEdge(type, section);
+            CustomWeightedEdge edge = new CustomWeightedEdge(section, strategy);
             this.routeMap.addEdge(section.getUpStation(), section.getDownStation(), edge);
             this.routeMap.setEdgeWeight(edge, edge.getWeight());
         });
-
-        return this;
     }
 
     public PathFinderBuilder setSource(Station station) {
