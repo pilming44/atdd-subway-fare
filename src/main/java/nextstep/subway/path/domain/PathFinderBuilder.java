@@ -27,6 +27,8 @@ public class PathFinderBuilder {
             return new DistancePathStrategy();
         } else if (type == PathSearchType.DURATION) {
             return new DurationPathStrategy();
+        } else if (type == PathSearchType.ARRIVAL_TIME) {
+            return new DurationPathStrategy();
         }
 
         throw new UnsupportedOperationException("지원하지 않는 PathSearchType입니다.");
