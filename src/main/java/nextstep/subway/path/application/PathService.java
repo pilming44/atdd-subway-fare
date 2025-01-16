@@ -12,10 +12,7 @@ import nextstep.subway.member.domain.AgeGroup;
 import nextstep.subway.member.domain.Member;
 import nextstep.subway.path.application.dto.PathRequest;
 import nextstep.subway.path.application.dto.PathResponse;
-import nextstep.subway.path.domain.DijkstraShortestPathFinder;
-import nextstep.subway.path.domain.FareCalculator;
-import nextstep.subway.path.domain.FareCondition;
-import nextstep.subway.path.domain.PathFinderResult;
+import nextstep.subway.path.domain.*;
 import nextstep.subway.station.application.dto.StationResponse;
 import nextstep.subway.station.domain.Station;
 import nextstep.subway.station.domain.StationRepository;
@@ -43,12 +40,20 @@ public class PathService {
         Station targetStation = getStation(pathRequest.getTarget());
 
         List<Line> allLines = lineRepository.findAll();
+        PathFinderResult pathFinderResult = null;
+        if (pathRequest.getType() == PathSearchType.ARRIVAL_TIME) {
+            pathFinderResult =JgraphPathFinder.searchBuilder().addAllPath(allLines, pathRequest.getType())
+                    .setSource(sourceStation)
+                    .setTarget(targetStation)
+                    .find();
+        } else {
+            pathFinderResult = DijkstraShortestPathFinder.searchBuilder()
+                    .addAllPath(allLines, pathRequest.getType())
+                    .setSource(sourceStation)
+                    .setTarget(targetStation)
+                    .find();
+        }
 
-        PathFinderResult pathFinderResult = DijkstraShortestPathFinder.searchBuilder()
-                .addAllPath(allLines, pathRequest.getType())
-                .setSource(sourceStation)
-                .setTarget(targetStation)
-                .find();
 
         List<StationResponse> stations = pathFinderResult.getStations();
 
